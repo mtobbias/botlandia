@@ -9,7 +9,7 @@ environment/botlandia-mongo
 environment/botlandia-rabbitmq
 environment/agents
 environment/tmp
-
+.idea
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
