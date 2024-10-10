@@ -1,0 +1,93 @@
+version: '3.8'
+
+services:
+  botlandia-client:
+    build:
+      context: ./front  # Caminho para o diretório do seu aplicativo React
+      dockerfile: Dockerfile    # Nome do Dockerfile (caso seja diferente, ajuste aqui)
+    container_name: botlandia-front
+    env_file:
+      - front/.env
+    ports:
+      - "80:80"  # Mapeia a porta 80 do host para a porta 80 do container (ajuste se necessário)
+    networks:
+      - app-network
+    restart: unless-stopped
+    depends_on:
+      - botlandia-back
+
+  botlandia-back:
+    build:
+      context: ./back
+      dockerfile: Dockerfile
+    container_name: botlandia-back
+    ports:
+      - "3001:3001"
+    env_file:
+      - back/.env
+    depends_on:
+      - botlandia-rabbitmq
+    networks:
+      - app-network
+    restart: unless-stopped
+    volumes:
+      - ./environment/botlandia-back:/app/botlandia-back  # Mapeia para diretório local
+
+  botlandia-api-whatsapp:
+    build:
+      context: ./api-whatsapp
+      dockerfile: Dockerfile
+    container_name: botlandia-api-whatsapp
+    ports:
+      - "3002:3002"
+    env_file:
+      - api-whatsapp/.env
+    networks:
+      - app-network
+    restart: unless-stopped
+    depends_on:
+      - botlandia-rabbitmq
+    volumes:
+      - ./environment/botlandia-api-whatsapp:/app/wwebjs_auth  # Mapeia para diretório local
+
+  botlandia-mongo:
+    image: mongo:latest
+    restart: unless-stopped
+    container_name: botlandia-mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: botlandia
+      MONGO_INITDB_ROOT_PASSWORD: botlandia
+    volumes:
+      - ./environment/botlandia-mongo:/data/db  # Mapeia para diretório local
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+
+  botlandia-rabbitmq:
+    image: rabbitmq:management
+    container_name: botlandia-rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: botlandia
+      RABBITMQ_DEFAULT_PASS: botlandia
+    ports:
+      - "5672:5672"      # Porta padrão do RabbitMQ
+      - "15672:15672"    # Porta do console de gerenciamento
+    volumes:
+      - ./environment/botlandia-rabbitmq:/var/lib/rabbitmq  # Mapeia para diretório local
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+    name: app-network
+volumes:
+  # Remova ou comente os volumes nomeados, já que estamos usando diretórios locais
+  # mongo-data:
+  #   driver: local
+  # rabbitmq-data:
+  #   driver: local
+  back-data:
+  # driver: local  # Opcional: Docker já gerencia volumes locais
