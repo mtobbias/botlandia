@@ -1,9 +1,8 @@
-import { Message } from 'whatsapp-web.js';
-
+// src/interfaces/whatsapp.interface.ts
 export interface IClientWhatsApp {
-  onQrcode(qrcode: string): void;
-  onMessage(message: Message): any;
-  onReady(): void;
-  onJoinGroup(props: any): any;
-  onLeaveGroup(props: any): any;
+    onQrcode: (qr: string) => Promise<void>;
+    onReady: () => Promise<void>;
+    onMessage: (msg: any) => Promise<void>;
+    onJoinGroup: (opts: any) => void;
+    onLeaveGroup: (opts: any) => void;
 }

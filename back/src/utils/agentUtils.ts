@@ -9,42 +9,46 @@ export interface AgentProfile {
 }
 
 export function getActiveProfile(): Promise<AgentProfile | null> {
-    const dbFilePath = path.join(
-        process.env.PATH_DATA || ".", `incarnations.db`
-    );
-    return new Promise<AgentProfile | null>((resolve, reject) => {
-        const db = new sqlite3.Database(dbFilePath, sqlite3.OPEN_READONLY, (err) => {
-            if (err) {
-                console.error(`[sqlUtils] Error opening database: ${err.message}`);
-                reject(err);
-                return;
-            }
+    try {
+        const dbFilePath = path.join(
+            process.env.PATH_DATA || ".", `incarnations.db`
+        );
+        return new Promise<AgentProfile | null>((resolve, reject) => {
+            const db = new sqlite3.Database(dbFilePath, sqlite3.OPEN_READONLY, (err) => {
+                if (err) {
+                    console.error(`[sqlUtils] Error opening database: ${err.message}`);
+                    reject(err);
+                    return;
+                }
 
-            const selectSQL = `
+                const selectSQL = `
                 SELECT role, name, description, active
                 FROM agent_profiles
                 WHERE active = 1
             `;
 
-            db.get(selectSQL, [], (err, row: any) => {
-                if (err) {
-                    console.error(`[sqlUtils] Error reading active profile: ${err.message}`);
-                    reject(err);
-                } else {
-                    if (row) {
-                        const activeProfile: AgentProfile = {
-                            role: row.role,
-                            name: row.name,
-                            description: row.description,
-                            active: row.active === 1
-                        };
-                        resolve(activeProfile);
+                db.get(selectSQL, [], (err, row: any) => {
+                    if (err) {
+                        console.error(`[sqlUtils] Error reading active profile: ${err.message}`);
+                        reject(err);
                     } else {
-                        resolve(null);
+                        if (row) {
+                            const activeProfile: AgentProfile = {
+                                role: row.role,
+                                name: row.name,
+                                description: row.description,
+                                active: row.active === 1
+                            };
+                            resolve(activeProfile);
+                        } else {
+                            resolve(null);
+                        }
                     }
-                }
-                db.close();
+                    db.close();
+                });
             });
         });
-    });
+    } catch (e) {
+        return Promise.resolve(null)
+    }
 }

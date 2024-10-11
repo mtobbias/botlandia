@@ -1,71 +1,73 @@
 import {Request, Response} from "express";
-import {ClientWhatsapp} from "@whatsapp/whatsapp.client";
-import {IClientWhatsApp} from "@whatsapp/whatsapp.interface";
+import {WhatsAppService} from "@whatsapp/whatsapp.service";
 
 export class WhatsAppController {
-    private clientWhatsapp: ClientWhatsapp;
-
-    constructor(iClientWhatsApp: IClientWhatsApp, clientId: string) {
-        this.clientWhatsapp = new ClientWhatsapp(iClientWhatsApp, clientId);
+    constructor(private whatsappService: WhatsAppService) {
     }
 
-    public async sendMessage(req: Request, res: Response) {
+    public async sendMessage(req: Request, res: Response): Promise<any> {
         const {to, message} = req.body;
         try {
-            await this.clientWhatsapp.sendMessage(to, message);
-            return res.status(200).json({success: true, message: "Message sent!"});
+            await this.whatsappService.sendMessage(to, message);
+            return res.status(200).json({success: true, message: "Mensagem enviada com sucesso!"});
         } catch (error: any) {
-            console.error("Error sending message:", error);
-            return res.status(500).json({success: false, error: error?.message || 'error to send'});
+            console.error("Erro ao enviar mensagem:", error);
+            return res.status(500).json({success: false, error: error?.message || 'Erro ao enviar mensagem.'});
         }
     }
 
-    public async sendMessageWithAttachment(req: Request, res: Response) {
+    public async sendMessageWithAttachment(req: Request, res: Response): Promise<Response> {
         const {to, message, attachmentPath} = req.body;
         try {
-            await this.clientWhatsapp.sendMessageWithAttachment(to, message, attachmentPath);
-            return res.status(200).json({success: true, message: "Message with attachment sent!"});
-        } catch (error) {
-            console.error("Error sending message with attachment:", error);
-            return res.status(500).json({success: false, error: "Error sending message with attachment."});
+            await this.whatsappService.sendMessageWithAttachment(to, message, attachmentPath);
+            return res.status(200).json({success: true, message: "Mensagem com anexo enviada com sucesso!"});
+        } catch (error: any) {
+            console.error("Erro ao enviar mensagem com anexo:", error);
+            return res.status(500).json({
+                success: false,
+                error: error?.message || "Erro ao enviar mensagem com anexo."
+            });
         }
     }
 
-    public async getGroups(req: Request, res: Response) {
+    public async getGroups(req: Request, res: Response): Promise<Response> {
         try {
-            const groups = await this.clientWhatsapp.getGroups();
+            const groups = await this.whatsappService.getGroups();
             return res.status(200).json({success: true, groups});
-        } catch (error) {
-            console.error("Error fetching groups:", error);
-            return res.status(500).json({success: false, error: "Error fetching groups."});
+        } catch (error: any) {
+            console.error("Erro ao buscar grupos:", error);
+            return res.status(500).json({success: false, error: error?.message || "Erro ao buscar grupos."});
         }
     }
 
-    public async getContacts(req: Request, res: Response) {
+    public async getContacts(req: Request, res: Response): Promise<Response> {
         try {
-            const contacts = await this.clientWhatsapp.getContacts();
+            const contacts = await this.whatsappService.getContacts();
             return res.status(200).json({success: true, contacts});
-        } catch (error) {
-            console.error("Error fetching contacts:", error);
-            return res.status(500).json({success: false, error: "Error fetching contacts."});
+        } catch (error: any) {
+            console.error("Erro ao buscar contatos:", error);
+            return res.status(500).json({success: false, error: error?.message || "Erro ao buscar contatos."});
         }
     }
 
-    public async sendMessageGroup(req: Request, res: Response) {
+    public async sendMessageObj(msgObj: any) {
+        const {origin, response} = msgObj
+        const {remote} = origin
+        await this.whatsappService.sendMessage(remote, response)
+        console.log(msgObj)
+    }
+
+    public async sendMessageGroup(req: Request, res: Response): Promise<Response> {
         const {groupId, message, mentions} = req.body;
         try {
-            await this.clientWhatsapp.sendMessageGroup(groupId, message, mentions);
-            return res.status(200).json({success: true, message: "Message sent to group!"});
-        } catch (error) {
-            console.error("Error sending message to group:", error);
-            return res.status(500).json({success: false, error: "Error sending message to group."});
+            await this.whatsappService.sendMessageGroup(groupId, message, mentions);
+            return res.status(200).json({success: true, message: "Mensagem enviada para o grupo com sucesso!"});
+        } catch (error: any) {
+            console.error("Erro ao enviar mensagem para o grupo:", error);
+            return res.status(500).json({
+                success: false,
+                error: error?.message || "Erro ao enviar mensagem para o grupo."
+            });
         }
-    }
-
-    async sendMessageObj(msgObj: any) {
-        const {origin,response} =  msgObj
-        const {remote} =origin
-        await this.clientWhatsapp.sendMessage(remote,response)
-        console.log(msgObj)
     }
 }

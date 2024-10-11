@@ -45,27 +45,32 @@ export class IaraWebSocket {
         });
 
         this.attachListeners();
-        this.updateAgent()
         this.rabbitUtil.consume('WHATSAPP_IN', async (msg) => {
             try {
-                this.notifyWhatsapp(msg.content.toString())
+                console.log('WHATSAPP_IN', msg.content.toString())
+                await this.notifyWhatsapp(msg.content.toString())
             } catch (err: any) {
+                console.error(err)
             }
         })
         this.rabbitUtil.consume('WHATSAPP_READY', async (msg) => {
             try {
                 Logger.info(`WHATSAPP_READY  ${msg}`);
-                this.webSocketServer.clients.forEach((client) => {
-                    if (client.readyState === WebSocket.OPEN) {
-                      this.sendNewMessage('WHATSAPP_READY', 'me', this.iaraAgent.getName().toLowerCase(), 'iara.png', 'Whatsapp está pronto', this.iaraAgent.getName(), client, false)
-                    }
-                });
+                await this.sendInformation('Whatsapp está pronto')
 
             } catch (err: any) {
             }
         })
 
 
+    }
+
+    private async sendInformation(message: string) {
+        this.webSocketServer.clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+                this.sendNewMessage('WHATSAPP_READY', 'me', this.iaraAgent.getName().toLowerCase(), 'iara.png', message, this.iaraAgent.getName(), client, false)
+            }
+        });
     }
 
     private async attachListeners() {
@@ -186,15 +191,18 @@ export class IaraWebSocket {
         return response.bill.answer.content || '';
     };
 
-    private async updateAgent() {
-        // await this.iaraAgent.solveThat('quem sou eu?')
-    }
-
     private async processMessageClient(args: any) {
         const indexName = Math.floor(Math.random() * NAMES.length);
         const indexAvatar = Math.floor(Math.random() * AVATARS.length);
         if (!this.listOfAgents.has(args.from)) {
-            const profile = await getActiveProfile()
+            let profile;
+            try{
+                 profile = await getActiveProfile()
+            }catch (err){}
+
+            if (!profile) {
+                await this.sendInformation('Não existe perfil criado para responder no whatsapp, o perfil "Iara" está sendo usado, crie um perfil')
+            }
             const newAnyone = new BuilderAnyone()
                 .withRole(profile?.role || Incarnations.iara.role)
                 .withBrain(BrainType.OPEN_AI)

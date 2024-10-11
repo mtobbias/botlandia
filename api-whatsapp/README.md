@@ -16,20 +16,6 @@
   - [whatsapp-web.js](https://github.com/pedroslopez/whatsapp-web.js) 📱
   - [RabbitMQ](https://www.rabbitmq.com/) 🐇
 
-- **Ferramentas de Desenvolvimento:**
-  - [ESLint](https://eslint.org/) 🧹
-  - [Prettier](https://prettier.io/) ✨
-  - [Jest](https://jestjs.io/) 🧪
-  - [ts-node](https://typestrong.org/ts-node/) 🚀
-  - [nodemon](https://nodemon.io/) 🔄
-
-- **Outras Dependências:**
-  - [Axios](https://axios-http.com/) 🌐
-  - [dotenv](https://github.com/motdotla/dotenv) 🛢️
-  - [uuid](https://github.com/uuidjs/uuid) 🔢
-  - [puppeteer](https://pptr.dev/) 🎭
-
-
 - **.env.example** 📄
   - Arquivo de exemplo para configuração das variáveis de ambiente.
 
@@ -42,4 +28,8 @@
 
 - [Node.js](https://nodejs.org/) instalado
 - [Git](https://git-scm.com/) instalado
-- [Docker](https://www.docker.com/) e [Docker Compose](https://docs.docker.com/compose/) instalados (opcional, para containerização)
+- [Docker](https://www.docker.com/) 
+
+    ```bash
+    docker build -t botlandia-api-whatsapp:0.0.1 .
+    ```
