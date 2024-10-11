@@ -34,9 +34,9 @@ export class IaraWebSocket {
         Logger.info(`Iniciando servidor WebSocket na porta ${port}...`);
         this.iaraAgent = new BuilderAnyone()
             .withRole(Incarnations.iara.role)
-            .withBrain(BrainType.OPEN_AI)
+            .withBrain(BrainType.OLLAMA)
             .withName(Incarnations.iara.name)
-            .withAllTool(this.toolStore.forIara())
+            .withAllTool([])
             .withThisIncarnation(Incarnations.iara.description)
             .build();
 

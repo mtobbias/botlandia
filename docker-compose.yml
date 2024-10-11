@@ -86,7 +86,7 @@ services:
     ports:
       - "11434:11434"
     command: >
-      /bin/sh -c "ollama run llama3.2:3b"
+      /bin/sh -c "ollama run llama3.2:1b"
     stdin_open: true
     tty: true
     networks:
