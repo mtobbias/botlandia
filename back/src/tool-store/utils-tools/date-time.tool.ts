@@ -28,7 +28,7 @@ export class DateTimeTool extends Tool {
      * @param arg String JSON contendo 'format' e/ou 'help'.
      * @returns Uma promessa que resolve com a data/hora ou com a mensagem de ajuda, ou rejeita com um erro.
      */
-    async run(arg: string): Promise<string> {
+    async run(arg: any): Promise<string> {
         Logger.toolSaid(this.name, `[DateTimeTool] Executando com estes argumentos: ${arg}`);
 
         let objArgs: DateTimeToolArgs;

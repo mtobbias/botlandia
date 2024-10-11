@@ -66,29 +66,7 @@ export class ToolStore {
             this.memory,
         ]
     }
-    forIara = () => {
-        return [
-            this.imageDescriptionTool,
-            this.googleCalendarTool,
-            this.searchDirectoryTool,
-            this.executeCommandTool,
-            this.imageCreationTool,
-            this.serperSearchTool,
-            this.mongoAdminTool,
-            this.puppeteerTool,
-            this.writeFileTool,
-            this.downloadTool,
-            this.rabbitMQTool,
-            this.readFileTool,
-            this.whatsAppTool,
-            this.dateTimeTool,
-            this.youTubeTool,
-            this.robotJSTool,
-            this.sqliteTool,
-            this.gmailTool,
-            this.memory,
-            this.elevenLabsSpeakTool,
-            this.incarnationsTool
-        ]
+    forIara = (): any[] => {
+        return [...this.forAnyone()]
     }
 }

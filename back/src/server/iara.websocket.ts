@@ -101,12 +101,13 @@ export class IaraWebSocket {
         Logger.debug(`Mensagem recebida do cliente (ID: ${clientId}): ${message}`);
         try {
             const data: any = JSON.parse(message);
-            if (data.type === 'GIVE_ME_TOOLS') {
-                const mapTools = this.toolStore.forIara().map((t) => {
+             const tools  = this.toolStore.forIara();
+            if (data.type === 'GIVE_ME_TOOLS' && tools.length>0) {
+                const mapTools = tools.map((t) => {
                     return {
-                        uuid: t.uuid,
-                        name: t.name,
-                        description: t.description
+                        uuid: t?.uuid,
+                        name: t?.name,
+                        description: t?.description
                     }
                 })
                 const broadcastData = {

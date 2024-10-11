@@ -27,6 +27,7 @@ services:
       - back/env.example
     depends_on:
       - botlandia-rabbitmq
+      - botlandia-ollama
     networks:
       - app-network
     restart: unless-stopped
@@ -79,9 +80,23 @@ services:
     networks:
       - app-network
 
+  botlandia-ollama:
+    image: ollama/ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    command: >
+      /bin/sh -c "ollama run llama3.2:3b"
+    stdin_open: true
+    tty: true
+    networks:
+      - app-network
+    restart: unless-stopped
+
 networks:
   app-network:
     driver: bridge
     name: app-network
+
 volumes:
   back-data:

@@ -3,8 +3,10 @@ import {
     AppBar,
     Toolbar,
     Typography,
-    Avatar, Grid,
+    Avatar, Grid, Button, IconButton,
 } from '@mui/material';
+import HardwareIcon from '@mui/icons-material/Hardware';
+import SendIcon from "@mui/icons-material/Send";
 
 export interface AppbarProps {
     handleOpenModal: any;
@@ -14,8 +16,6 @@ export interface AppbarProps {
 
 const BotlandiaAppBar: React.FC<AppbarProps> = ({
                                                     handleOpenModal,
-                                                    avatarSrc,
-                                                    username,
                                                 }) => {
     return (
         <AppBar position="static" color="primary" elevation={4}>
@@ -25,15 +25,9 @@ const BotlandiaAppBar: React.FC<AppbarProps> = ({
                         <img src={'logo.png'} width={'100rem'}/>
                     </Grid>
                 </Grid>
-
-                <Avatar
-                    alt={username}
-                    src={avatarSrc}
-                    onClick={handleOpenModal}
-                    sx={{cursor: 'pointer'}}
-                >
-                    {username.charAt(0).toUpperCase()}
-                </Avatar>
+                <IconButton onClick={handleOpenModal} color="secondary" aria-label="add an alarm">
+                    <HardwareIcon/>
+                </IconButton>
             </Toolbar>
         </AppBar>
     );
