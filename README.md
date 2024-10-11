@@ -51,16 +51,100 @@ Botlandia é um projeto pessoal de um assistente para facilitar o dia a dia.
 
 ---
 
-## 🐳 Docker Compose
+# <img src="front/public/iara.png" alt="Iara Banner" width="42"/> Iara 
+### Assistente pessoal principal
+O nome **IAra** foi escolhido em referência à figura mitológica brasileira.
 
-O arquivo `docker-compose.yml` está localizado na raiz do projeto e facilita a configuração e execução de todos os serviços necessários para rodar a aplicação de forma integrada.
+<img src="./environment/docs/001.png"/> 
 
-````
-docker-compose up -d
-````
+## 🧰 Ferramentas Disponíveis
+
+Botlandia oferece uma ampla gama de ferramentas para atender às suas necessidades:
+
+| Ferramenta              | 📝 Descrição                                                                                      |
+|-------------------------|---------------------------------------------------------------------------------------------------|
+| `MemoryTool`            | 🧠 Gerencia a memória ou o estado dos agentes, mantendo o contexto durante interações.            |
+| `GmailTool`             | 📧 Integração com a API do Gmail para gerenciar e-mails diretamente através dos agentes.          |
+| `RobotJSTool`           | 🤖 Automatiza interações com a interface do sistema operacional utilizando RobotJS.               |
+| `SqliteTool`            | 🗄️ Facilita operações CRUD com bancos de dados SQLite.                                           |
+| `YouTubeTool`           | 🎥 Integração com a API do YouTube para gerenciar vídeos e playlists.                            |
+| `DateTimeTool`          | 🕒 Manipulação e formatação de datas e horários.                                                 |
+| `WhatsAppTool`          | 📱 Integração com a API do WhatsApp para enviar e receber mensagens.                             |
+| `RabbitMQTool`          | 📨 Interface para interagir com RabbitMQ para comunicação assíncrona.                             |
+| `DownloadTool`          | ⬇️ Gerencia o download de arquivos a partir de URLs.                                             |
+| `ReadFileTool`          | 📂 Leitura de arquivos do sistema de arquivos.                                                   |
+| `PuppeteerTool`         | 🌐 Automação de navegadores para tarefas como scraping e testes automatizados.                   |
+| `WriteFileTool`         | 📝 Escrita de arquivos no sistema de arquivos.                                                   |
+| `MongoAdminTool`        | 🗄️ Gestão do MongoDB utilizando a URI especificada.                                              |
+| `IncarnationsTool`      | 🔄 Gerencia diferentes instâncias ou "encarnações" de agentes.                                    |
+| `SerperSearchTool`      | 🔍 Realiza buscas avançadas utilizando a API Serper.                                             |
+| `ImageCreationTool`     | 🖼️ Cria ou manipula imagens utilizando modelos de geração de imagens.                            |
+| `GoogleCalendarTool`    | 📅 Integração com o Google Calendar para gerenciar eventos e agendamentos.                       |
+| `ExecuteCommandTool`    | 💻 Executa comandos no sistema operacional diretamente.                                         |
+| `ElevenLabsSpeakTool`   | 🎤 Integração com a API do ElevenLabs para síntese de fala audível.                              |
+| `SearchDirectoryTool`   | 🔎 Pesquisa por arquivos e diretórios no sistema de arquivos.                                    |
+| `ImageDescriptionTool`  | 🖼️📝 Gera descrições de imagens utilizando modelos de visão computacional.                         |
+
+
+
+# 🚀 Baixando e Executando o Botlandia com Docker-Compose
+
+Baixar e executar o Botlandia  utilizando **Docker-Compose**. 
+Siga os passos abaixo para configurar e iniciar o seu ambiente de forma rápida e eficiente.
+
+## 📋 Índice
+
+1. [🔍 Introdução](#-introdução)
+2. [🛠️ Pré-requisitos](#️-pré-requisitos)
+3. [📥 Clonando o Repositório](#-clonando-o-repositório)
+4. [🔧 Configurando as Variáveis de Ambiente](#-configurando-as-variáveis-de-ambiente)
+5. [🐳 Executando com Docker-Compose](#🐳-executando-com-docker-compose)
+6. [✅ Verificando a Execução](#-verificando-a-execução)
+7. [🛠️ Solução de Problemas](#️-solução-de-problemas)
+8. [🎉 Conclusão](#-conclusão)
+
+## 🛠️ Pré-requisitos
+
+Antes de começar, certifique-se de que você possui os seguintes componentes instalados em sua máquina:
+
+- **[Git](https://git-scm.com/downloads)**: Para clonar o repositório.
+- **[Docker](https://www.docker.com/get-started)**: Para containerizar a aplicação.
+- **[Docker-Compose](https://docs.docker.com/compose/install/)**: Para orquestrar os containers.
+
+## 📥 Clonando o Repositório
+
+Primeiro, você precisa clonar o repositório do Botlandia para o seu ambiente local.
 
 [![Run Docker Compose](https://img.shields.io/badge/Run-Docker%20Compose-blue.svg)](./docker-compose.yml)
 
----
 
-# <img src="front/public/iara.png" alt="Iara Banner" width="42"/> Iara 
+1. Abra o terminal ou prompt de comando.
+2. Execute o seguinte comando para clonar o repositório:
+
+    ```bash
+    git clone https://github.com/mtobbias/botlandia.git
+    cd botlandia
+    ```
+3. **Construa e inicie os containers** executando o seguinte comando na raiz do projeto:
+
+    > **📌 Dica:** Utilize a flag `-d` para rodar os containers em modo *detached* (em segundo plano):
+
+    ```bash
+    docker-compose up --build -d
+    ```
+## ✅ Tudo pronto
+
+Após iniciar os containers, verifique se o Botlandia está funcionando corretamente.
+
+4. **Acesse a aplicação** abrindo seu navegador e navegando para:
+
+    ```
+    http://localhost:8080
+    ```
+
+
+
+> **⚠️ Nota:** 
+> - Todas as imagens foram geradas utilizando chatGPT.
+> - Parte ou totalidade de uma ferramenta utilizou chatGPT.
+> - Toda informação gerada por LLM, deve ser verificada.

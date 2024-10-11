@@ -9,7 +9,7 @@ services:
     env_file:
       - front/env.example
     ports:
-      - "80:80"  # Mapeia a porta 80 do host para a porta 80 do container (ajuste se necessário)
+      - "8080:80"  # Mapeia a porta 80 do host para a porta 80 do container (ajuste se necessário)
     networks:
       - app-network
     restart: unless-stopped
