@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile    # Nome do Dockerfile (caso seja diferente, ajuste aqui)
     container_name: botlandia-front
     env_file:
-      - front/.env
+      - front/env.example
     ports:
       - "80:80"  # Mapeia a porta 80 do host para a porta 80 do container (ajuste se necessário)
     networks:
@@ -24,7 +24,7 @@ services:
     ports:
       - "3001:3001"
     env_file:
-      - back/.env
+      - back/env.example
     depends_on:
       - botlandia-rabbitmq
     networks:
@@ -41,7 +41,7 @@ services:
     ports:
       - "3002:3002"
     env_file:
-      - api-whatsapp/.env
+      - api-whatsapp/env.example
     networks:
       - app-network
     restart: unless-stopped
@@ -84,10 +84,4 @@ networks:
     driver: bridge
     name: app-network
 volumes:
-  # Remova ou comente os volumes nomeados, já que estamos usando diretórios locais
-  # mongo-data:
-  #   driver: local
-  # rabbitmq-data:
-  #   driver: local
   back-data:
-  # driver: local  # Opcional: Docker já gerencia volumes locais

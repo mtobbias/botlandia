@@ -5,11 +5,9 @@ import * as yaml from "js-yaml";
 export class Souls {
     private static instance?: Souls;
     public readonly iara;
-    public readonly rafaela;
 
     constructor() {
         this.iara = this.readSoulFromFile('iara.yaml')
-        this.rafaela = this.readSoulFromFile('rafaela.yaml')
     }
 
     private readSoulFromFile(fileSoul: string) {

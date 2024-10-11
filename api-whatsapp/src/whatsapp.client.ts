@@ -4,7 +4,7 @@ import fs from "fs";
 //@ts-ignore
 import * as mime from 'mime-types';
 import axios from 'axios';
-
+import os from 'os';
 export class ClientWhatsapp {
     // @ts-ignore
     private client: Client;
@@ -19,12 +19,13 @@ export class ClientWhatsapp {
     }
 
     private async init() {
+        console.log('Sistema Operacional:', os.type());
 
         try {
             console.info(`[${this.clientId}] Initializing client...`);
             this.client = new Client({
                 puppeteer: {
-                    executablePath: '/usr/bin/google-chrome',
+                    // executablePath: undefined,// '/usr/bin/google-chrome',
                     headless: true,
                     args: ["--no-sandbox"]
                 },

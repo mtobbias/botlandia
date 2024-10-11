@@ -8,12 +8,5 @@ export class Incarnations {
         description: Souls.getInstance().iara.assistent.description
 
     };
-    static rafaela: IncarnationsType = {
-        role: Souls.getInstance().rafaela.assistent.role,
-        name: Souls.getInstance().rafaela.assistent.name,
-        description: Souls.getInstance().rafaela.assistent.description
-
-    };
-
 }
 
