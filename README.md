@@ -1,6 +1,4 @@
-
 <img src="front/public/logo.png"/>
-
 
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)
@@ -12,72 +10,57 @@
 
 ## 🚀 Sobre o Projeto
 
-Bem-vindo ao **Iara**! 🎉 Iara é uma assistente pessoal inteligente desenvolvida para facilitar o seu dia a dia com uma variedade de ferramentas incríveis. Com funcionalidades como pesquisa na internet, busca no YouTube, criação de imagens, conversão de texto para fala, gestão de banco de dados e atendimento via WhatsApp, Iara está aqui para te ajudar em tudo que você precisar! 🤖💬🌐
+Botlandia é um projeto pessoal de um assistente para facilitar o dia a dia.
 
-## 🛠️ Funcionalidades
+## 🛠️ Algumas funcionalidades
 
-- **🔍 Pesquisa na Internet:** Encontre informações atualizadas e precisas com facilidade.
-- **📺 Pesquisa no YouTube:** Descubra vídeos relevantes e personalizados.
-- **🎨 Criação de Imagens:** Gere imagens incríveis a partir de descrições textuais.
-- **🗣️ Capacidade de Falar:** Converta texto em fala de forma clara e natural.
-- **🗄️ Uso de Banco de Dados:** Gerencie e armazene informações de maneira eficiente.
-- **💬 Atendimento via WhatsApp:** Interaja com os usuários através do WhatsApp de forma automatizada e amigável.
+- 🔍 **Pesquisa na Internet:** Encontre informações atualizadas e precisas com facilidade.
+- 📺 **Pesquisa no YouTube:** Descubra vídeos relevantes e personalizados de acordo com suas preferências.
+- 🎨 **Criação de Imagens:** Gere imagens incríveis a partir de descrições textuais.
+- 🗣️ **Conversão de Texto em Fala:** Transforme texto em fala de forma clara e natural.
+- 🗄️ **Gerenciamento de Bancos de Dados:** Utilize MongoDB, SQLite ou MySQL para armazenar e gerenciar informações de maneira eficiente.
+- 🔄 **Mensageria com RabbitMQ:** Gerencie filas e mensagens de forma robusta e escalável.
+- ✉️ **Envio de E-mails com Gmail:** Envie e gerencie e-mails de forma prática e segura através do Gmail.
+- 💬 **Atendimento via WhatsApp:** Interaja com os usuários de maneira automatizada e amigável através do WhatsApp.
 
-## 🗂️ Estrutura do Projeto
+---
 
-A estrutura do projeto **Iara** está organizada de forma modular para facilitar o desenvolvimento, manutenção e escalabilidade. Veja abaixo a organização das pastas na raiz do projeto:
-
-
-
-### 📁 Descrição das Pastas
+### 📁 **Projetos**
 
 - **api-whatsapp/** 📱
-  - Responsável pela integração com a API do WhatsApp Business.
-  - Gerencia o envio e recebimento de mensagens.
-  - Implementa lógica de automação e respostas automatizadas.
+  - **Cliente API para WhatsApp Não Oficial:** Conecta-se através da aplicação de navegador WhatsApp Web.
+  - **Funcionamento com Puppeteer:** A biblioteca lança a aplicação WhatsApp Web no navegador e a gerencia utilizando o Puppeteer para criar uma instância do WhatsApp Web, reduzindo o risco de bloqueio.
+  - **Referência:** [whatsapp-web.js](https://github.com/pedroslopez/whatsapp-web.js)
+  - **Observação:** Esta API não é oficial e utiliza métodos não suportados diretamente pelo WhatsApp, o que pode implicar em riscos de bloqueio da conta se os termos de uso forem violados.
 
 - **back/** 🖥️
-  - Contém o código do backend desenvolvido em **Node.js** utilizando **Express**.
-  - Gerencia a lógica de negócios, comunicação com o banco de dados e integração com outras APIs.
-  - Implementa a **MemoryTool** para gerenciar a memória e personalizar as interações com os usuários.
+  - **Backend em Node.js:** Desenvolvido com **Node.js** e **Express** para garantir um desempenho robusto.
+  - **Lógica de Negócios:** Gerencia as regras de negócios e processos internos da aplicação.
+  - **Integração com Bancos de Dados:** Conecta-se a MongoDB, SQLite ou MySQL para armazenamento eficiente de dados.
+  - **MemoryTool:** Ferramenta para gerenciar a memória e personalizar as interações com os usuários, proporcionando uma experiência mais dinâmica.
 
 - **front/** 🎨
-  - Contém o código do frontend desenvolvido em **React**.
-  - Proporciona uma interface de usuário intuitiva e responsiva para interagir com a Iara.
-  - Integração com as funcionalidades do backend para fornecer uma experiência de usuário fluida.
+  - **Frontend em React:** Construído com **React** para oferecer uma interface de usuário intuitiva e responsiva.
+  - **Experiência do Usuário:** Proporciona uma navegação fluida e amigável para interagir com a aplicação.
+  - **Integração com Backend:** Conecta-se perfeitamente com as funcionalidades do backend, garantindo uma experiência de uso coesa e eficiente.
 
 - **docker-compose.yml** 🐳
-  - Orquestra todos os serviços necessários para rodar a aplicação de forma integrada utilizando Docker.
-  - Facilita o processo de setup e deployment, garantindo que todas as dependências sejam corretamente configuradas e executadas.
+  - **Orquestração de Serviços:** Utiliza **Docker Compose** para integrar e gerenciar todos os serviços necessários da aplicação.
+  - **Facilidade de Deploy:** Simplifica o processo de setup e deployment, assegurando que todas as dependências sejam configuradas corretamente.
+  - **Ambiente Consistente:** Garante que a aplicação rode de maneira uniforme em diferentes ambientes, minimizando problemas de compatibilidade.
 
-## 🌐 Tecnologias Utilizadas
-
-- **Backend:**
-  - [Node.js](https://nodejs.org/) 🟢
-  - [Express](https://expressjs.com/) 📦
-  - **Banco de Dados:** [MongoDB](https://www.mongodb.com/) 🗄️
-  - **Mensageria:** [RabbitMQ](https://www.rabbitmq.com/) 🐇
-
-- **Frontend:**
-  - [React](https://reactjs.org/) ⚛️
-
-- **Inteligência Artificial:**
-  - [OpenAI API](https://openai.com/api/) 🤖
-
-- **APIs Adicionais:**
-  - Google Custom Search 🔍
-  - YouTube Data API 📺
-  - WhatsApp Business API 💬
-  - DALL·E para criação de imagens 🎨
-
-- **Outras Ferramentas:**
-  - **MemoryTool:** Para gestão de memória e personalização das interações.
-  - **OAuth 2.0:** Para autenticação segura 🔒
-  - **Docker & Docker Compose:** Para containerização e orquestração de serviços 🐳
+---
 
 ## 🐳 Docker Compose
 
 O arquivo `docker-compose.yml` está localizado na raiz do projeto e facilita a configuração e execução de todos os serviços necessários para rodar a aplicação de forma integrada.
 
-# <img src="front/public/iara.png" alt="Iara Banner" width="42"/> Iara 
+````
+docker-compose up -d
+````
 
+[![Run Docker Compose](https://img.shields.io/badge/Run-Docker%20Compose-blue.svg)](./docker-compose.yml)
+
+---
+
+# <img src="front/public/iara.png" alt="Iara Banner" width="42"/> Iara 
