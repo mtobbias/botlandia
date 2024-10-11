@@ -4,8 +4,8 @@
   "description": "Aplicação Node.js em TypeScript com Docker, MongoDB e RabbitMQ",
   "main": "dist/index.js",
   "scripts": {
-    "start": "node dist/index.js",
-    "webSocket": "ts-node -r tsconfig-paths/register src/index.ts",
+    "start:prod": "node dist/index.js",
+    "start": "ts-node -r tsconfig-paths/register src/index.ts",
     "build": "tsc && tsc-alias"
   },
   "author": "Marcelo Tobias <marcelo.tobbias@gmail.com>",
@@ -27,7 +27,6 @@
     "pngjs": "^7.0.0",
     "puppeteer": "^23.4.1",
     "rehype-raw": "^7.0.0",
-    "robotjs": "^0.6.0",
     "sqlite3": "^5.1.7",
     "tsconfig-paths": "^4.2.0",
     "uuid": "^10.0.0",

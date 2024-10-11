@@ -10,7 +10,6 @@ import {WhatsAppTool} from "botlandia/tool-store/communications/whatsapp.tool";
 import {ImageCreationTool} from "botlandia/tool-store/openai-tools/image-generation.tool";
 import {ImageDescriptionTool} from "botlandia/tool-store/openai-tools/image-description.tool";
 import {PuppeteerTool} from "botlandia/tool-store/puppeteer-tools/puppeteer.tool ";
-import {RobotJSTool} from "botlandia/tool-store/robotojs-tools/robotojs.tool";
 import {MongoAdminTool} from "botlandia/tool-store/database/mongo-admin.tool";
 import {SqliteTool} from "botlandia/tool-store/database/sqllite.tool";
 import {DownloadTool} from "botlandia/tool-store/basic/download.tool";
@@ -23,13 +22,12 @@ import {IncarnationsTool} from "botlandia/tool-store/iara-tools/incarnation.tool
 export class ToolStore {
     readonly memory = new MemoryTool();
     readonly gmailTool = new GmailTool()
-    readonly robotJSTool = new RobotJSTool()
     readonly sqliteTool = new SqliteTool()
     readonly youTubeTool = new YouTubeTool()
     readonly dateTimeTool = new DateTimeTool()
     readonly whatsAppTool = new WhatsAppTool()
     readonly rabbitMQTool = new RabbitMQTool(process.env.RABBITMQ_URL || '')
-    readonly downloadTool = new DownloadTool()
+    readonly downloadTool = new DownloadTool(process.env.BOTLANDIA_DOWNLOAD || '/botlandia/download')
     readonly readFileTool = new ReadFileTool()
     readonly puppeteerTool = new PuppeteerTool()
     readonly writeFileTool = new WriteFileTool()
@@ -60,9 +58,10 @@ export class ToolStore {
             this.whatsAppTool,
             this.dateTimeTool,
             this.youTubeTool,
-            this.robotJSTool,
             this.sqliteTool,
             this.gmailTool,
+            this.incarnationsTool,
+            this.elevenLabsSpeakTool,
             this.memory,
         ]
     }

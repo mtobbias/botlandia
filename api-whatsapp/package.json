@@ -6,8 +6,8 @@
   "module": "build/index.mjs",
   "types": "build/index.d.ts",
   "scripts": {
-    "start": "node dist/index.js",
-    "whatsapp": "ts-node -r tsconfig-paths/register src/index.ts",
+    "start:prod": "node dist/index.js",
+    "start": "ts-node -r tsconfig-paths/register src/index.ts",
     "build": "tsc && tsc-alias"
   },
   "keywords": [

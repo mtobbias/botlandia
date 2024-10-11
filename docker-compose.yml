@@ -27,13 +27,14 @@ services:
       - back/env.example
     depends_on:
       - botlandia-rabbitmq
-      - botlandia-ollama
     networks:
       - app-network
     restart: unless-stopped
     volumes:
-      - ./environment/botlandia-back:/app/botlandia-back  # Mapeia para diretório local
-
+      - ./environment/botlandia-back:/app/botlandia-back
+      - ./environment/tmp:/botlandia/tmp
+      - ./environment/public:/botlandia/public
+      - ./environment/download:/botlandia/download
   botlandia-api-whatsapp:
     build:
       context: ./api-whatsapp
@@ -49,7 +50,10 @@ services:
     depends_on:
       - botlandia-rabbitmq
     volumes:
-      - ./environment/botlandia-api-whatsapp:/app/wwebjs_auth  # Mapeia para diretório local
+      - ./environment/botlandia-api-whatsapp:/app/wwebjs_auth
+      - ./environment/tmp:/botlandia/tmp
+      - ./environment/public:/botlandia/public
+      - ./environment/download:/botlandia/download
 
   botlandia-mongo:
     image: mongo:latest
@@ -82,16 +86,16 @@ services:
 
   botlandia-ollama:
     image: ollama/ollama
-    container_name: ollama
-    ports:
-      - "11434:11434"
-    command: >
-      /bin/sh -c "ollama run llama3.2:1b"
-    stdin_open: true
+    container_name: botlandia-ollama
     tty: true
+    pull_policy: always
     networks:
       - app-network
     restart: unless-stopped
+    entrypoint: [ "/bin/sh", "/botlandia-ollama/run_ollama.sh" ]
+    volumes:
+      - ./environment/botlandia-ollama:/botlandia-ollama
+      - ./environment/botlandia-ollama/root:/root
 
 networks:
   app-network:

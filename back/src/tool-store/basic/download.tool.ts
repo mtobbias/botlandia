@@ -11,16 +11,15 @@ interface DownloadToolArgs {
 
 export class DownloadTool extends Tool {
     static UUID = "da5610a0-24a5-43fd-a452-56426a10af47";
-    private baseDirectory?: string;
+    private readonly baseDirectory: string;
 
-    constructor(baseDirectory?: string) {
+    constructor(baseDirectory: string) {
         super(
             DownloadTool.UUID,
             "DownloadTool",
             `
             Baixa um arquivo da URL especificada e salva no caminho de arquivo fornecido.
             Suporta vários tipos de arquivos, incluindo JSON.
-            Se um diretório base for fornecido, o filePath é resolvido relativo a ele.
             Garante que os arquivos sejam salvos dentro do diretório base para prevenir acessos não autorizados.
           `
         );
@@ -31,17 +30,10 @@ export class DownloadTool extends Tool {
             type: "string",
             description: "A URL do arquivo a ser baixado.",
         });
-        this.addField({
-            name: "filePath",
-            type: "string",
-            description:
-                "O caminho de destino onde o arquivo será salvo. Se um diretório base estiver definido, esse caminho será relativo a ele.",
-        });
     }
 
     /**
      * Executa a operação de download com os argumentos fornecidos.
-     * @param arg String JSON contendo 'url' e 'filePath'.
      * @returns Uma promessa que resolve com uma mensagem de sucesso ou rejeita com um erro.
      */
     async run(arg: any): Promise<string> {
@@ -57,17 +49,17 @@ export class DownloadTool extends Tool {
             throw new Error("Formato de argumento inválido. Esperado uma string JSON.");
         }
 
-        const { url, filePath } = obj;
+        const { url } = obj;
 
-        if (!url || !filePath) {
+        if (!url ) {
             Logger.error(
-                "[DownloadTool] Argumentos obrigatórios ausentes. 'url' e 'filePath' devem ser fornecidos."
+                "[DownloadTool] Argumentos obrigatórios ausentes. 'url' ."
             );
-            throw new Error("Faltando argumentos obrigatórios: 'url' e/ou 'filePath'.");
+            throw new Error("Faltando argumentos obrigatórios: 'url' .");
         }
 
         try {
-            const result = await this.downloadFile(url, filePath);
+            const result = await this.downloadFile(url);
             Logger.info(`[DownloadTool] Download bem-sucedido: ${result}`);
             return result;
         } catch (error: any) {
@@ -79,29 +71,12 @@ export class DownloadTool extends Tool {
     /**
      * Baixa um arquivo da URL especificada e salva no caminho de arquivo designado.
      * @param url A URL do arquivo a ser baixado.
-     * @param filePath O caminho onde o arquivo deve ser salvo.
      * @returns Uma promessa que resolve com o caminho do arquivo após o download bem-sucedido.
      */
-    private async downloadFile(url: string, filePath: string): Promise<string> {
-        let fullPath: string;
+    private async downloadFile(url: string): Promise<string> {
 
         try {
-            if (this.baseDirectory) {
-                // Resolve o caminho absoluto dentro do diretório base
-                fullPath = path.resolve(this.baseDirectory, filePath);
 
-                // Previne travessia de diretórios garantindo que o caminho resolvido comece com o diretório base
-                if (!fullPath.startsWith(path.resolve(this.baseDirectory))) {
-                    throw new Error(
-                        "Caminho de arquivo inválido. Tentativa de salvar fora do diretório base não é permitida."
-                    );
-                }
-            } else {
-                // Se nenhum diretório base estiver definido, resolve o caminho relativo ao diretório de trabalho atual
-                fullPath = path.resolve(filePath);
-            }
-
-            Logger.debug(`[DownloadTool] Caminho de arquivo resolvido: ${fullPath}`);
 
             // Inicia a requisição HTTP GET com streaming
             const response = await axios.get(url, { responseType: "stream" });
@@ -113,19 +88,19 @@ export class DownloadTool extends Tool {
                 );
             }
 
-            const directory = path.dirname(fullPath);
+            const directory = path.dirname(path.resolve(this.baseDirectory));
             await fs.promises.mkdir(directory, { recursive: true });
             Logger.debug(`[DownloadTool] Diretório garantido que existe: ${directory}`);
 
-            const writer = fs.createWriteStream(fullPath);
+            const writer = fs.createWriteStream(path.resolve(this.baseDirectory));
 
             // Encaminha os dados da resposta para o arquivo
             response.data.pipe(writer);
 
             return new Promise((resolve, reject) => {
                 writer.on("finish", () => {
-                    Logger.info(`[DownloadTool] Arquivo baixado com sucesso para: ${fullPath}`);
-                    resolve(`Arquivo baixado com sucesso para: ${fullPath}`);
+                    Logger.info(`[DownloadTool] Arquivo baixado com sucesso para: ${path.resolve(this.baseDirectory)}`);
+                    resolve(`Arquivo baixado com sucesso para: ${path.resolve(this.baseDirectory)}`);
                 });
                 writer.on("error", (writeError) => {
                     Logger.error(
