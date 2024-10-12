@@ -32,12 +32,16 @@ export class WhatsAppService implements IClientWhatsApp {
 
     public async onMessage(msg: any): Promise<void> {
         const {to, from, body, type, author, deviceType, id} = msg;
+        const chat = await msg.getChat();
         try {
             const contact = await msg.getContact();
             const avatarUrl = await contact.getProfilePicUrl();
             const response = {
                 to,
                 from: contact.number,
+                isGroup: chat.isGroup,
+                groupName: chat.name,
+                mention: msg.mentionedIds.filter((m:string)=>m===to).length>0,
                 body,
                 type,
                 author,
@@ -46,7 +50,7 @@ export class WhatsAppService implements IClientWhatsApp {
                 username: contact.pushname,
                 avatarUrl,
             };
-            await this.rabbitUtil.publish('WHATSAPP_IN', JSON.stringify(response));
+            await this.rabbitUtil.publish(chat.isGroup ? (response.mention? 'WHATSAPP_GROUP_ME' : 'WHATSAPP_GROUP') : 'WHATSAPP_IN', JSON.stringify(response));
             Logger.whatslog("Mensagem recebida e publicada no WHATSAPP_IN:", response);
         } catch (err: any) {
             Logger.error("Erro ao tratar mensagem recebida:", err);

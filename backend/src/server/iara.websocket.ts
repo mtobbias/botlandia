@@ -299,7 +299,7 @@ export class IaraWebSocket {
             Logger.warn(
                 `Agente não encontrado para o contato: ${message.from}`
             );
-            return ;
+            return;
         }
         await this.processIncomingMessageFromClient({
             to: agentData.anyone.getName(),
@@ -435,13 +435,19 @@ export class IaraWebSocket {
             );
         }
 
-        const indexName = Math.floor(Math.random() * NAMES.length);
+        let indexName = Math.floor(Math.random() * NAMES.length);
         const indexAvatar = Math.floor(Math.random() * AVATARS.length);
+        let nameProfile = profile?.name || NAMES[indexName];
+
+        while (this.listOfAgents.has(nameProfile)) {
+            indexName = Math.floor(Math.random() * NAMES.length);
+            nameProfile = NAMES[indexName];
+        }
 
         return new BuilderAnyone()
             .withRole(profile?.role || Incarnations.iara.role)
             .withBrain(BrainType.OPEN_AI)
-            .withName(profile?.name || NAMES[indexName])
+            .withName(nameProfile)
             .withAvatarUrl(AVATARS[indexAvatar])
             .withAllTool(this.toolStore.forIara())
             .withThisIncarnation(
