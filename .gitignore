@@ -15,6 +15,7 @@ environment/public/**
 environment/agents/**
 environment/tmp/**
 front/build
+env.docker-compose
 .idea
 # User-specific stuff
 .idea/**/workspace.xml
