@@ -86,7 +86,7 @@ export class IaraWebSocket {
             Logger.error(`Erro ao obter ferramentas: ${error}`);
         }
 
-        if (!this.listOfTools) {
+        if (!this.listOfTools || this.listOfTools?.length === 0 ) {
             this.listOfTools = this.toolStore.forAnyone().map((tool) => ({
                 uuid: tool.uuid,
                 name: tool.name,

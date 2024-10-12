@@ -21,9 +21,9 @@ export class ToolsMemory {
         );
         this.db = new sqlite3.Database(dbFilePath, (err: Error | null) => {
             if (err) {
-                console.error('Erro ao conectar ao banco de dados:', err.message);
+                console.error('Erro ao conectar ao banco de dados:',dbFilePath, err.message);
             } else {
-                console.log('Conectado ao banco de dados SQLite.');
+                console.log('Conectado ao banco de dados SQLite.',dbFilePath);
                 this.createTable();
             }
         });
