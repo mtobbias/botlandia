@@ -75,7 +75,6 @@ Botlandia oferece uma ampla gama de ferramentas para atender às suas necessidad
 |------------------------|------------------------------------------------------------------------------------------|
 | `MemoryTool`           | 🧠 Gerencia a memória ou o estado dos agentes, mantendo o contexto durante interações.   |
 | `GmailTool`            | 📧 Integração com a API do Gmail para gerenciar e-mails diretamente através dos agentes. |
-| `RobotJSTool`          | 🤖 Automatiza interações com a interface do sistema operacional utilizando RobotJS.      |
 | `SqliteTool`           | 🗄️ Facilita operações CRUD com bancos de dados SQLite.                                  |
 | `YouTubeTool`          | 🎥 Integração com a API do YouTube para gerenciar vídeos e playlists.                    |
 | `DateTimeTool`         | 🕒 Manipulação e formatação de datas e horários.                                         |
