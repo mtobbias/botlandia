@@ -31,7 +31,7 @@ services:
       - app-network
     restart: unless-stopped
     volumes:
-      - ./environment/botlandia-backendend:/app/botlandia/botlandia-backend/
+      - ./environment/botlandia-backend:/app/botlandia/botlandia-backend/
       - ./environment/tmp:/botlandia/tmp
       - ./environment/public:/botlandia/public
       - ./environment/download:/botlandia/download
