@@ -11,10 +11,11 @@ export interface BaseProps {
     isOwnMessage: boolean;
     message: string;
     to: string;
+    from:string;
     timestamp: string;
 }
 
-const BotlandiaChatRender: React.FC<BaseProps> = ({ isOwnMessage, message, to, timestamp }) => {
+const BotlandiaChatRender: React.FC<BaseProps> = ({ isOwnMessage, message, to,from, timestamp }) => {
     const components = {
         a: ({ href, children }: any) => {
             const youtubeRegex = /(?:youtube\.com.*[?&]v=|youtu\.be\/)([^&\s]+)/;
@@ -108,7 +109,7 @@ const BotlandiaChatRender: React.FC<BaseProps> = ({ isOwnMessage, message, to, t
                     textAlign: isOwnMessage ? 'right' : 'left',
                 }}
             >
-                {isOwnMessage ? '' : to + ' - '} {timestamp}
+                {isOwnMessage ? from : to + ' - '} {timestamp}
             </Typography>
         </Box>
     );

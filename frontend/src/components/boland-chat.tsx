@@ -39,7 +39,6 @@ const BotlandiaChat: React.FC<BaseProps> = ({
                             src={msg?.avatarUrl}
                             style={{margin: '0 8px'}}
                         >
-                            {/*{!msg?.avatarUrl && msg?.username[0]}*/}
                         </Avatar>)
                     }
 
@@ -53,7 +52,8 @@ const BotlandiaChat: React.FC<BaseProps> = ({
             </Avatar>)}
             <BotlandiaChatRender isOwnMessage={isOwnMessage}
                                  message={msg.message}
-                                 to={msg.to}
+                                 to={msg?.username}
+                                 from={msg?.from}
                                  timestamp={msg.timestamp}/>
         </Box>
     );
