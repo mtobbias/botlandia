@@ -1,6 +1,6 @@
-import { google, youtube_v3 } from "googleapis";
-import { Tool } from "botlandia/core/tools";
-import { Logger } from "botlandia/utils/logger";
+import {google, youtube_v3} from "googleapis";
+import {Tool} from "botlandia/core/tools";
+import {Logger} from "botlandia/lib/logger";
 
 interface YouTubeToolArgs {
     action: "searchVideos" | "getVideoDetails";
@@ -83,7 +83,7 @@ export class YouTubeTool extends Tool {
             );
         }
 
-        this.youtube = google.youtube({ version: "v3", auth: apiKey });
+        this.youtube = google.youtube({version: "v3", auth: apiKey});
     }
 
     /**
@@ -101,7 +101,17 @@ export class YouTubeTool extends Tool {
             throw new Error("Formato de entrada inválido. Esperado uma string JSON.");
         }
 
-        const { action, query, videoId, maxResults, pageToken, order, videoDuration, videoDefinition, videoEmbeddable } = objArgs;
+        const {
+            action,
+            query,
+            videoId,
+            maxResults,
+            pageToken,
+            order,
+            videoDuration,
+            videoDefinition,
+            videoEmbeddable
+        } = objArgs;
 
         if (!action) {
             Logger.error("[YouTubeTool] Argumento obrigatório ausente: 'action'.");

@@ -1,6 +1,6 @@
 import {ElevenLabsClient, play} from "elevenlabs";
 import {Tool} from "botlandia/core/tools";
-import {Logger} from "botlandia/utils/logger";
+import {Logger} from "botlandia/lib/logger";
 
 interface SpeakToolArgs {
     speak: string;

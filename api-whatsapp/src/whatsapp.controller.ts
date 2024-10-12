@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
 import {WhatsAppService} from "botlandia/api/whatsapp/whatsapp.service";
-import {Logger} from "botlandia/api/whatsapp/logger";
+import {Logger} from "botlandia/lib/logger";
 
 export class WhatsAppController {
     constructor(private whatsappService: WhatsAppService) {

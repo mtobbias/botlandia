@@ -15,7 +15,15 @@
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
     "outDir": "dist",
-    "rootDir": "src",
+    "baseUrl": ".",
+    "rootDirs": [
+      "src"
+    ],
+    "paths": {
+      "botlandia/*": [
+        "./src/*"
+      ]
+    },
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,

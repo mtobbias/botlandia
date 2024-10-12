@@ -1,7 +1,7 @@
 // @ts-ignore
 import amqplib, {Connection, Channel, ConsumeMessage} from "amqplib";
 import {Tool} from "botlandia/core/tools";
-import {Logger} from "botlandia/utils/logger";
+import {Logger} from "botlandia/lib/logger";
 
 interface RabbitMQToolArgs {
     action: "publish" | "consume";

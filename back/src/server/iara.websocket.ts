@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 import WebSocket, {WebSocketServer} from 'ws';
 import {Anyone} from "botlandia/core/anyone";
-import {Logger} from "botlandia/utils/logger";
+import {Logger} from "botlandia/lib/logger";
 import {BuilderAnyone} from "botlandia/core/builders/builder.anyone";
 import {BrainType} from "botlandia/core/enums";
 import {v4 as uuidv4} from 'uuid';
@@ -10,9 +10,8 @@ import {Incarnations} from "botlandia/core/soul/incarnations";
 import {RabbitUtil} from "botlandia/utils/rabbit.util";
 import {AVATARS, NAMES} from "botlandia/utils/names";
 import {getActiveProfile} from "botlandia/utils/agentUtils";
-import {WS_STATUS} from "botlandia/index";
 import {ToolsMemory} from "botlandia/utils/tools.memory";
-import {BrainFactory} from "botlandia/core/factory";
+import {WS_STATUS} from "botlandia/lib/interfaes.lib";
 
 dotenv.config();
 

@@ -1,7 +1,9 @@
 // @ts-ignore
 import * as amqp from 'amqplib';
+// @ts-ignore
 import * as dotenv from 'dotenv';
-import {Logger} from "botlandia/api/whatsapp/logger";
+// @ts-ignore
+import {Logger} from "botlandia/lib/logger";
 
 dotenv.config();
 

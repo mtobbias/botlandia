@@ -1,6 +1,6 @@
 import {Anyone} from "botlandia/core/anyone";
 import {ITool} from "botlandia/core/interfaces";
-import {Logger} from "botlandia/utils/logger";
+import {Logger} from "botlandia/lib/logger";
 import {BuilderFieldTool, BuilderTools} from "botlandia/core/builders/builder.tools";
 
 export class Squad {

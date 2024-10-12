@@ -1,5 +1,6 @@
 import {Tool} from "botlandia/core/tools";
-import {Logger} from "botlandia/utils/logger";
+import {Logger} from "botlandia/lib/logger";
+
 
 interface DateTimeToolArgs {
     format?: "date" | "time" | "full";

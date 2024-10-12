@@ -1,10 +1,9 @@
-// src/clients/ClientWhatsapp.ts
 import {Client, LocalAuth, MessageMedia} from "whatsapp-web.js";
 import fs from "fs";
 import mime from "mime-types";
 import axios from "axios";
 import os from "os";
-import {Logger} from "botlandia/api/whatsapp/logger";
+import {Logger} from "botlandia/lib/logger";
 import {IClientWhatsApp} from "botlandia/api/whatsapp/whatsapp.interface";
 
 export class ClientWhatsapp {

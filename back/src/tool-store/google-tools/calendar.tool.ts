@@ -4,7 +4,7 @@ import path from "path";
 import readline from 'readline';
 import dotenv from 'dotenv';
 import {Tool} from "botlandia/core/tools";
-import {Logger} from "botlandia/utils/logger";
+import {Logger} from "botlandia/lib/logger";
 
 // Carrega as variáveis de ambiente do arquivo .env
 dotenv.config();

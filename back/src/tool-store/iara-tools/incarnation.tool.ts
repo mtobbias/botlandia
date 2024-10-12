@@ -1,7 +1,7 @@
 import sqlite3 from "sqlite3";
 import path from "path";
 import {Tool} from "botlandia/core/tools";
-import {Logger} from "botlandia/utils/logger";
+import {Logger} from "botlandia/lib/logger";
 
 interface IncarnationsToolArgs {
     action: "create" | "read" | "update" | "delete" | "deleteAll" | "list";

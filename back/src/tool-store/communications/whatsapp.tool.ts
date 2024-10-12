@@ -1,7 +1,7 @@
 import axios from "axios";
 import dotenv from "dotenv";
 import {Tool} from "botlandia/core/tools";
-import {Logger} from "botlandia/utils/logger";
+import {Logger} from "botlandia/lib/logger";
 
 // Carregando variáveis de ambiente
 dotenv.config();

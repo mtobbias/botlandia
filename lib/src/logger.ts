@@ -1,4 +1,3 @@
-
 /**
  * Enumeração dos níveis de log disponíveis.
  */
@@ -35,6 +34,20 @@ export enum LogColor {
     // Cores de fundo
     BGGreen = "\x1b[42m",
     BGWhite = "\x1b[47m",
+    BGRed = "\x1b[41m",
+    BGYellow = "\x1b[43m",
+    BGBlue = "\x1b[44m",
+    BGMagenta = "\x1b[45m",
+    BGCyan = "\x1b[46m",
+    // Cores de fundo bright
+    BGGray = "\x1b[100m",
+    BGRedBright = "\x1b[101m",
+    BGGreenBright = "\x1b[102m",
+    BGYellowBright = "\x1b[103m",
+    BGBlueBright = "\x1b[104m",
+    BGMagentaBright = "\x1b[105m",
+    BGCyanBright = "\x1b[106m",
+    BGWhiteBright = "\x1b[107m"
 }
 
 /**
@@ -246,5 +259,17 @@ export class Logger {
         const timestamp = new Date().toISOString();
         const formattedMessage = `${LogColor.BGGreen}${LogColor.White}[${timestamp}] BOTLANDIA-API-WHATSAPP: ${message.toUpperCase()}${LogColor.Reset}`;
         console.log(formattedMessage, ...args);
+    }
+
+    static toolSaid(toolName: string, ...message: any[]) {
+        const timestamp = new Date().toISOString();
+        const formattedMessage = `${LogColor.BGCyan}${LogColor.White}[${timestamp}] BOTLANDIA-TOOL-${toolName.toUpperCase()}: ${message}${LogColor.Reset}`;
+        console.log(formattedMessage, ...message);
+    }
+
+    static agentSaid(name: string, ...message: any[]) {
+        const timestamp = new Date().toISOString();
+        const formattedMessage = `${LogColor.BGCyan}${LogColor.White}[${timestamp}] BOTLANDIA-AGENT-${name.toUpperCase()}: ${message}${LogColor.Reset}`;
+        console.log(formattedMessage, ...message);
     }
 }

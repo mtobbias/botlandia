@@ -13,7 +13,20 @@ export interface IBill {
     tokens: number;
     answer: Answer;
 }
+export interface ILog {
+  timestamp?: Date;        // Data e hora do log (opcional, pode ser gerado automaticamente)
+  level: LogLevel;         // Nível de severidade do log (INFO, WARNING, ERROR, etc.)
+  message: string;        // Mensagem principal do log
+  source?: string;         // Origem do log (nome da classe, função, etc.)
+  data?: any;             // Dados adicionais relevantes para o log (opcional)
+}
 
+export enum LogLevel {
+  DEBUG = "DEBUG",
+  INFO = "INFO",
+  WARNING = "WARNING",
+  ERROR = "ERROR",
+}
 export interface IBillAnyone {
     bill: IBill;
     totalTokens: number;

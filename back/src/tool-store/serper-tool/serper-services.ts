@@ -1,5 +1,5 @@
 import axios, {AxiosRequestConfig} from "axios";
-import {Logger} from "botlandia/utils/logger";
+import {Logger} from "botlandia/lib/logger";
 
 export class SerperServices {
     private readonly apiKey = process.env.SERPER_API_KEY;

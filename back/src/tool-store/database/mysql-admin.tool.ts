@@ -1,7 +1,7 @@
 // @ts-ignore
 import {createConnection, Connection} from "mysql2/promise";
 import {Tool} from "botlandia/core/tools";
-import {Logger} from "botlandia/utils/logger";
+import {Logger} from "botlandia/lib/logger";
 
 interface MySQLAdminToolArgs {
     action:
