@@ -203,4 +203,8 @@ export class Anyone {
         this.tools = [];
         this.tools.push(...toolsToNow)
     }
+
+    useBrain(brain: IBrain) {
+        this.brain = brain
+    }
 }

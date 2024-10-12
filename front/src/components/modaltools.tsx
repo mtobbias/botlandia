@@ -75,6 +75,7 @@ const ModalTools: React.FC<BaseProps> = (props: BaseProps) => {
                                     </CardContent>
                                     <Switch onClick={() => {
                                         props.onChange(!tool.enable, tool.uuid)
+                                        props.onClose(true)
                                     }} checked={tool.enable} color="secondary"/>
                                     <CardActions>
 

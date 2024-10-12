@@ -11,13 +11,11 @@ import SendIcon from "@mui/icons-material/Send";
 export interface AppbarProps {
     handleOpenModal: any;
     avatarSrc: string;
-    username: string;
 }
 
 const BotlandiaAppBar: React.FC<AppbarProps> = ({
                                                     handleOpenModal,
                                                     avatarSrc,
-                                                    username,
                                                 }) => {
     return (
         <AppBar position="static" color="primary" elevation={4}>
@@ -32,12 +30,10 @@ const BotlandiaAppBar: React.FC<AppbarProps> = ({
                 </IconButton>
 
                 <Avatar
-                    alt={username}
+                    alt={'em breve...'}
                     src={avatarSrc}
-                    onClick={handleOpenModal}
-                    sx={{cursor: 'pointer'}}
+                    sx={{cursor: 'auto'}}
                 >
-                    {username.charAt(0).toUpperCase()}
                 </Avatar>
             </Toolbar>
         </AppBar>

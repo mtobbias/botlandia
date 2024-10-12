@@ -11,6 +11,8 @@ import {RabbitUtil} from "botlandia/utils/rabbit.util";
 import {AVATARS, NAMES} from "botlandia/utils/names";
 import {getActiveProfile} from "botlandia/utils/agentUtils";
 import {WS_STATUS} from "botlandia/index";
+import {ToolsMemory} from "botlandia/utils/tools.memory";
+import {BrainFactory} from "botlandia/core/factory";
 
 dotenv.config();
 
@@ -26,12 +28,15 @@ export class IaraWebSocket {
     private readonly iaraAgent: Anyone;
     private readonly toolStore = new ToolStore()
     private readonly rabbitUtil = new RabbitUtil()
+    private readonly toolsMemory = new ToolsMemory()
     private listOfAgents: Map<string, {
         origin: any,
         anyone: Anyone
     }> = new Map();
-    private listOfTools;//this.toolStore.forIara();
+    private listOfTools: any[] | undefined;
+
     constructor(port: number) {
+        this.updateTools();
         Logger.info(`Iniciando servidor WebSocket na porta ${port}...`);
         this.webSocketServer = new WebSocketServer({port}, () => {
             Logger.success(`Servidor WebSocket iniciado com sucesso na porta ${port}!`);
@@ -45,14 +50,7 @@ export class IaraWebSocket {
                 console.error(err)
             }
         })
-        this.listOfTools = this.toolStore.forAnyone().map((t) => {
-            return {
-                uuid: t?.uuid,
-                name: t?.name,
-                description: t?.description,
-                enable: false,
-            }
-        })
+
 
         this.rabbitUtil.consume(RabbitUtil.WHATSAPP_READY, async (msg) => {
             try {
@@ -69,6 +67,29 @@ export class IaraWebSocket {
             .withThisIncarnation(Incarnations.iara.description)
             .build();
 
+    }
+
+    private async updateTools() {
+        let dataTools
+        try {
+            dataTools = await this.toolsMemory.getAllItems();
+        } catch (err) {
+        }
+
+        this.listOfTools = dataTools ? dataTools : this.toolStore.forAnyone().map((t) => {
+            const item = {
+                uuid: t?.uuid,
+                name: t?.name,
+                description: t?.description,
+                enable: false,
+            }
+            return item;
+        })
+        if (!dataTools) {
+            for (const item of this.listOfTools) {
+                await this.toolsMemory.addItem(item.uuid, item.name, item.description);
+            }
+        }
     }
 
     private async sendInformation(message: string) {
@@ -104,7 +125,7 @@ export class IaraWebSocket {
         try {
             const data: any = JSON.parse(message);
 
-            if (data.type === WS_STATUS.GIVE_ME_TOOLS && this.listOfTools.length > 0) {
+            if (data.type === WS_STATUS.GIVE_ME_TOOLS && this.listOfTools && this.listOfTools.length > 0) {
                 const broadcastData = {
                     type: WS_STATUS.GIVE_ME_TOOLS_RESPONSE,
                     tools: this.listOfTools
@@ -115,12 +136,13 @@ export class IaraWebSocket {
                 const resp = await this.processMessage(data.message);
                 await this.sendNewMessage(clientId, 'me', this.iaraAgent.getName().toLowerCase(), 'iara.png', resp, this.iaraAgent.getName(), client, false)
             }
-            if (data.type === WS_STATUS.TOOL_CHANGE) {
-                const tool = this.listOfTools.filter((t) => t.uuid === data.idTool)[0]
-                const newList = this.listOfTools.filter((t) => t.uuid !== data.idTool)
+            if (data.type === WS_STATUS.TOOL_CHANGE && this.listOfTools) {
+                const tool = this.listOfTools.filter((t: any) => t.uuid === data.idTool)[0]
+                const newList = this.listOfTools.filter((t: any) => t.uuid !== data.idTool)
                 if (tool) {
                     tool.enable = data.value
                     this.listOfTools = [...newList, tool]
+                    await this.toolsMemory.updateItem(tool.uuid, tool)
                 }
                 const broadcastData = {
                     type: WS_STATUS.GIVE_ME_TOOLS_RESPONSE,
@@ -189,9 +211,11 @@ export class IaraWebSocket {
     };
 
     private async processMessage(message: any): Promise<string> {
-        const idTools = this.listOfTools.filter((t) => t.enable).map((t) => t.uuid);
-        const toolsToNow = this.toolStore.forAnyone().filter((f) => idTools.includes(f.uuid));
-        this.iaraAgent.useTools(toolsToNow)
+        if (this.listOfTools) {
+            const idTools = this.listOfTools.filter((t: any) => t.enable).map((t: any) => t.uuid);
+            const toolsToNow = this.toolStore.forAnyone().filter((f) => idTools.includes(f.uuid));
+            this.iaraAgent.useTools(toolsToNow)
+        }
         const response = await this.iaraAgent.solveThat(message, this.callBackLog.bind(this));
         return response.bill.answer.content || '';
     };

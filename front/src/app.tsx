@@ -149,7 +149,6 @@ const App: React.FC = () => {
                 <BotlandiaAppBar
                     handleOpenModal={handleOpenModal}
                     avatarSrc={'me.png'}
-                    username={username}
 
                 />
                 <ModalTools
