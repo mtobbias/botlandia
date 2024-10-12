@@ -22,8 +22,7 @@ export class IaraWebSocket {
     private readonly toolStore = new ToolStore();
     private readonly rabbitUtil = new RabbitUtil();
     private readonly toolsMemory = new ToolsMemory();
-    private listOfAgents: Map<string, { origin: string; anyone: Anyone }> =
-        new Map();
+    private listOfAgents: Map<string, { origin: string; anyone: Anyone }> = new Map();
     private listOfTools: IToolData[] | undefined;
 
     constructor(port: number) {
@@ -86,7 +85,7 @@ export class IaraWebSocket {
             Logger.error(`Erro ao obter ferramentas: ${error}`);
         }
 
-        if (!this.listOfTools || this.listOfTools?.length === 0 ) {
+        if (!this.listOfTools || this.listOfTools?.length === 0) {
             this.listOfTools = this.toolStore.forAnyone().map((tool) => ({
                 uuid: tool.uuid,
                 name: tool.name,
@@ -275,7 +274,7 @@ export class IaraWebSocket {
             to: to,
             from: from,
             avatarUrl: avatarUrl,
-            message: message,
+            message: `${message}`,
             username: username,
             toChat: toChat,
             timestamp: new Date().toLocaleTimeString(),
@@ -286,15 +285,30 @@ export class IaraWebSocket {
     private async processWhatsappMessage(
         message: IWhatsappMessage
     ): Promise<void> {
-        await this.processIncomingMessageFromClient(message);
 
-        const agentData = this.listOfAgents.get(message.from);
+        if (!this.listOfAgents.has(message.from)) {
+            const newAnyone = await this.createAnyoneForWhatsapp(message)
+            this.listOfAgents.set(message.from, {
+                anyone: newAnyone,
+                origin: message.id
+            })
+        }
+        let agentData = this.listOfAgents.get(message.from);
+
         if (!agentData) {
             Logger.warn(
                 `Agente não encontrado para o contato: ${message.from}`
             );
-            return;
+            return ;
         }
+        await this.processIncomingMessageFromClient({
+            to: agentData.anyone.getName(),
+            from: message.from,
+            avatarUrl: message.avatarUrl,
+            id: message.id,
+            body: message.body,
+            username: message.username,
+        });
 
         const agentResponse = await agentData.anyone.solveThat(
             message.body
@@ -371,7 +385,7 @@ export class IaraWebSocket {
             if (client.readyState === WebSocket.OPEN) {
                 this.sendNewMessage(
                     message.id,
-                    this.iaraAgent.getName().toLowerCase(),
+                    message.to,
                     message.from,
                     message.avatarUrl,
                     message.body,

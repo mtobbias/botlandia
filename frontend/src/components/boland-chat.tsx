@@ -1,7 +1,7 @@
 import React from 'react';
 import {
     Avatar,
-    Box,
+    Box, Grid,
 } from '@mui/material';
 import BotlandiaChatRender from "./chat-render";
 
@@ -50,9 +50,7 @@ const BotlandiaChat: React.FC<BaseProps> = ({
                 src={msg?.avatarUrl}
                 style={{margin: '0 8px'}}
             >
-                {/*{!msg?.avatarUrl && msg?.username[0]}*/}
             </Avatar>)}
-
             <BotlandiaChatRender isOwnMessage={isOwnMessage}
                                  message={msg.message}
                                  to={msg.to}
