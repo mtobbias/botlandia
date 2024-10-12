@@ -1,12 +1,19 @@
 {
-  "name": "whatsapp-service",
+  "name": "botlandia-api-whatsapp",
   "version": "0.0.1",
-  "description": "service-whatsapp",
+  "description": "botlandia-api-whatsapp",
+  "author": "Marcelo Tobias<marcelo.tobbias@gmail.com>",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "import": "./build/index.js",
+      "require": "./build/index.cjs"
+    }
+  },
   "main": "build/index.js",
   "module": "build/index.mjs",
   "types": "build/index.d.ts",
   "scripts": {
-    "start:prod": "node dist/index.js",
     "start:whatsapp": "ts-node -r tsconfig-paths/register src/index.ts",
     "start": "ts-node -r tsconfig-paths/register src/index.ts",
     "build": "tsc && tsc-alias"
@@ -17,14 +24,6 @@
     "agents",
     "automation"
   ],
-  "author": "Open Source Community",
-  "license": "MIT",
-  "exports": {
-    ".": {
-      "import": "./build/index.js",
-      "require": "./build/index.cjs"
-    }
-  },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.4",
     "@types/express": "^5.0.0",

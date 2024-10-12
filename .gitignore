@@ -5,7 +5,8 @@
 api-whatsapp/wwebjs_auth
 api-whatsapp/.wwebjs_cache
 environment/botlandia-api-whatsapp/**
-environment/botlandia-back/**
+environment/botlandia-backend/data/**
+environment/botlandia-backend/download/**
 environment/botlandia-mongo/**
 environment/botlandia-rabbitmq/**
 environment/botlandia-ollama/root/**

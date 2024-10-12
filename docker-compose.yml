@@ -1,37 +1,37 @@
 version: '3.8'
 
 services:
-  botlandia-client:
+  botlandia-frontend:
     build:
       context: ./front  # Caminho para o diretório do seu aplicativo React
       dockerfile: Dockerfile    # Nome do Dockerfile (caso seja diferente, ajuste aqui)
     container_name: botlandia-front
     env_file:
-      - front/env.example
+      - env.docker-compose
     ports:
       - "8080:80"  # Mapeia a porta 80 do host para a porta 80 do container (ajuste se necessário)
     networks:
       - app-network
     restart: unless-stopped
     depends_on:
-      - botlandia-back
+      - botlandia-backend
 
-  botlandia-back:
+  botlandia-backend:
     build:
-      context: ./back
+      context: backend
       dockerfile: Dockerfile
-    container_name: botlandia-back
+    container_name: botlandia-backendend
     ports:
       - "3001:3001"
     env_file:
-      - back/env.example
+      - env.docker-compose
     depends_on:
       - botlandia-rabbitmq
     networks:
       - app-network
     restart: unless-stopped
     volumes:
-      - ./environment/botlandia-back:/app/botlandia-back
+      - ./environment/botlandia-backendend:/app/botlandia-backendend
       - ./environment/tmp:/botlandia/tmp
       - ./environment/public:/botlandia/public
       - ./environment/download:/botlandia/download
@@ -43,7 +43,7 @@ services:
     ports:
       - "3002:3002"
     env_file:
-      - api-whatsapp/env.example
+      - env.docker-compose
     networks:
       - app-network
     restart: unless-stopped

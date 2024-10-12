@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import {WhatsAppService} from "botlandia/api/whatsapp/whatsapp.service";
 import {WhatsAppController} from "botlandia/api/whatsapp/whatsapp.controller";
 import {Logger} from "botlandia/lib/logger";
+
 class WhatsappApplication {
     public app: Application;
     private readonly port: number;
@@ -11,7 +12,7 @@ class WhatsappApplication {
 
     constructor() {
         this.app = express();
-        this.port = parseInt(process.env.PORT || "3002", 10);
+        this.port = parseInt(process.env.BOTLANDIA_API_WHATSAPP_PORT || "3002", 10);
         this.configMiddleware();
         this.whatsappService = new WhatsAppService();
         this.whatsappController = new WhatsAppController(this.whatsappService);

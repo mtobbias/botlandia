@@ -19,7 +19,7 @@ export class RabbitUtil {
      * Inicializa a classe RabbitUtil lendo a URL do RabbitMQ a partir das variáveis de ambiente.
      */
     constructor() {
-        this.url = process.env.RABBITMQ_URL as string; // Lê a URL do RabbitMQ do ambiente
+        this.url = process.env.BOTLANDIA_RABBITMQ_URI as string; // Lê a URL do RabbitMQ do ambiente
     }
 
     /**
