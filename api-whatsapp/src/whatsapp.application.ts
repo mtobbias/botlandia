@@ -2,7 +2,7 @@ import express, {Application} from "express";
 import bodyParser from "body-parser";
 import {WhatsAppService} from "botlandia/api/whatsapp/whatsapp.service";
 import {WhatsAppController} from "botlandia/api/whatsapp/whatsapp.controller";
-import {Logger} from "botlandia/lib/logger";
+import {Logger} from "botlandia/api/whatsapp/logger";
 
 class WhatsappApplication {
     public app: Application;

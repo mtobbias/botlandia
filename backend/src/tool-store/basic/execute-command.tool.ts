@@ -1,6 +1,6 @@
 import { exec } from "child_process";
 import { Tool } from "botlandia/core/tools";
-import {Logger} from "botlandia/lib/logger";
+import {Logger} from "../../../../api-whatsapp/src/logger";
 import os from "os";
 
 interface ExecuteCommandToolArgs {

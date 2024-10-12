@@ -1,5 +1,5 @@
 import axios, {AxiosRequestConfig} from "axios";
-import {Logger} from "botlandia/lib/logger";
+import {Logger} from "../../../../api-whatsapp/src/logger";
 
 export class SerperServices {
     private readonly apiKey = process.env.BOTLANDIA_BACKEND_SERPER_KEY;

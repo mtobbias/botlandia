@@ -2,7 +2,7 @@ import {Request, Response} from "express";
 import {IClientWhatsApp} from "botlandia/api/whatsapp/whatsapp.interface";
 import {RabbitUtil} from "botlandia/api/whatsapp/rabbit.util";
 import {ClientWhatsapp} from "botlandia/api/whatsapp/whatsapp.client";
-import {Logger} from "botlandia/lib/logger";
+import {Logger} from "botlandia/api/whatsapp/logger";
 import {WhatsAppController} from "botlandia/api/whatsapp/whatsapp.controller";
 
 export class WhatsAppService implements IClientWhatsApp {

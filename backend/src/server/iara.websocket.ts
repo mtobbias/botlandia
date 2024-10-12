@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 import WebSocket, {WebSocketServer} from "ws";
 import {Anyone} from "botlandia/core/anyone";
-import {Logger} from "botlandia/lib/logger";
+import {Logger} from "../../../api-whatsapp/src/logger";
 import {BuilderAnyone} from "botlandia/core/builders/builder.anyone";
 import {BrainType} from "botlandia/core/enums";
 import {v4 as uuidv4} from "uuid";
@@ -11,8 +11,7 @@ import {RabbitUtil} from "botlandia/utils/rabbit.util";
 import {AVATARS, NAMES} from "botlandia/utils/names";
 import {getActiveProfile} from "botlandia/utils/agentUtils";
 import {ToolsMemory} from "botlandia/utils/tools.memory";
-import {WS_STATUS} from "botlandia/lib/interfaes.lib";
-import {EVENTS_WS, IToolData, IWhatsappMessage} from "botlandia/core/interfaces";
+import {EVENTS_WS, IToolData, IWhatsappMessage, WS_STATUS} from "botlandia/core/interfaces";
 import {BrainFactory} from "botlandia/core/factory";
 
 dotenv.config();
@@ -69,7 +68,7 @@ export class IaraWebSocket {
         );
 
         const getBrain = () => {
-           return BrainFactory.giveMeThis(process.env.BOTLANDIA_IARA_BRAIN)
+            return BrainFactory.giveMeThis(process.env.BOTLANDIA_IARA_BRAIN)
         }
 
         this.iaraAgent = new BuilderAnyone()

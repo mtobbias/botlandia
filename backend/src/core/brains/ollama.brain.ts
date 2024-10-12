@@ -3,7 +3,7 @@ import ollama, {Ollama} from 'ollama'
 // @ts-ignore
 import * as dotenv from "dotenv";
 import {Brain} from "botlandia/core/brain";
-import {Logger} from "botlandia/lib/logger";
+import {Logger} from "../../../../api-whatsapp/src/logger";
 import {Answer, IBill, IBrain, ITool} from "botlandia/core/interfaces";
 
 export class OllamaBrain extends Brain implements IBrain {

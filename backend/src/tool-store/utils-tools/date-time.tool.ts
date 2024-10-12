@@ -1,5 +1,5 @@
 import {Tool} from "botlandia/core/tools";
-import {Logger} from "botlandia/lib/logger";
+import {Logger} from "../../../../api-whatsapp/src/logger";
 
 
 interface DateTimeToolArgs {

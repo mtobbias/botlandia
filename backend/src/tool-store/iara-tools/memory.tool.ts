@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 import {Tool} from "botlandia/core/tools";
-import {Logger} from "botlandia/lib/logger";
+import {Logger} from "../../../../api-whatsapp/src/logger";
 import Datastore from "nedb";
 
 /**

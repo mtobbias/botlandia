@@ -3,7 +3,7 @@ import fs from "fs";
 import mime from "mime-types";
 import axios from "axios";
 import os from "os";
-import {Logger} from "botlandia/lib/logger";
+import {Logger} from "botlandia/api/whatsapp/logger";
 import {IClientWhatsApp} from "botlandia/api/whatsapp/whatsapp.interface";
 
 export class ClientWhatsapp {

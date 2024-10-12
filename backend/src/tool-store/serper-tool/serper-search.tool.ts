@@ -1,6 +1,6 @@
 import { Tool } from "botlandia/core/tools";
 import { SerperServices } from "botlandia/tool-store/serper-tool/serper-services";
-import {Logger} from "botlandia/lib/logger";
+import {Logger} from "../../../../api-whatsapp/src/logger";
 
 interface SerperSearchWebToolArgs {
     query: string;

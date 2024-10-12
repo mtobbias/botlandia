@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as dotenv from "dotenv";
 import {Tool} from "botlandia/core/tools";
-import {Logger} from "botlandia/lib/logger";
+import {Logger} from "../../../../api-whatsapp/src/logger";
 
 dotenv.config();
 

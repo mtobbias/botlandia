@@ -21,7 +21,13 @@ export interface ILog {
   data?: any;             // Dados adicionais relevantes para o log (opcional)
 }
 
-
+export enum WS_STATUS {
+    NEW_MESSAGE = 'NEW_MESSAGE',
+    NEW_MESSAGE_HUMAN = 'NEW_MESSAGE_HUMAN',
+    GIVE_ME_TOOLS_RESPONSE = 'GIVE_ME_TOOLS_RESPONSE',
+    GIVE_ME_TOOLS = 'GIVE_ME_TOOLS',
+    TOOL_CHANGE = 'TOOL_CHANGE'
+}
 
 export enum EVENTS_WS {
   CLOSE = "close",
