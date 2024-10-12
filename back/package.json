@@ -6,6 +6,7 @@
   "scripts": {
     "start:prod": "node dist/index.js",
     "start": "ts-node -r tsconfig-paths/register src/index.ts",
+    "start:backend": "ts-node -r tsconfig-paths/register src/index.ts",
     "build": "tsc && tsc-alias"
   },
   "author": "Marcelo Tobias <marcelo.tobbias@gmail.com>",

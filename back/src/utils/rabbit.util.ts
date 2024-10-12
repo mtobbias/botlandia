@@ -8,7 +8,9 @@ export class RabbitUtil {
     private connection: amqp.Connection;
     private channel: amqp.Channel;
     private url: string;
-
+    public static readonly WHATSAPP_IN = "WHATSAPP_IN"
+    public static readonly WHATSAPP_OUT = "WHATSAPP_OUT"
+    public static readonly WHATSAPP_READY = "WHATSAPP_READY"
     constructor() {
         this.url = process.env.RABBITMQ_URL as string; // Lê a URL do RabbitMQ do ambiente
 

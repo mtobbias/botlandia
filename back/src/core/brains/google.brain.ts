@@ -74,7 +74,7 @@ export class GoogleBrain extends Brain {
         const list: any = [];
         resources.forEach((tool: ITool) => {
             list.push({
-                name: `_${tool.uuid}`,
+                name: `_${tool.uuid.toString().replace(/-/g, "_")}`,
                 description: tool.description,
                 parameters: {
                     type: "object",
@@ -94,9 +94,16 @@ export class GoogleBrain extends Brain {
         const result = await chatSession.sendMessage(about);
         const response = result.response.text();
         // return {content: response};
+        const candidates = result.response?.candidates;
+        const callFn = candidates ? candidates[0].content?.parts[0] : undefined
+
         return {
             tokens: result.response.usageMetadata.totalTokenCount,
             answer: {
+                function_call: callFn.functionCall === undefined ? undefined : {
+                    name: callFn.functionCall.name.slice(1).toString().replace(/_/g, "-"),
+                    arguments: JSON.stringify(callFn.functionCall.args)
+                },
                 content: response || ''
             } as Answer
         };

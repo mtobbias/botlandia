@@ -22,13 +22,13 @@ const App: React.FC = () => {
     const [tabs, setTabs] = useState<string[]>(['iara']);
     const [openModal, setOpenModal] = useState<boolean>(false);
     const [tools, setTools] = useState<Tool[]>([]);
-    const [newMessage, setNewMessage] = useState<any>({});
+    const [isConnected, setIsConnected] = useState<any>(false);
 
     useEffect(() => {
         const wsUrl = process.env.REACT_APP_WEBSOCKET_URL || `ws://${window.location.hostname}:3001`;
         ws.current = new WebSocket(wsUrl);
         ws.current.onopen = () => {
-            console.log('Conectado ao servidor WebSocket');
+            setIsConnected(true)
         };
         ws.current.onmessage = (event: MessageEvent) => {
             const data = JSON.parse(event.data);
@@ -43,7 +43,7 @@ const App: React.FC = () => {
         };
 
         ws.current.onclose = () => {
-            console.log('Desconectado do servidor WebSocket');
+            setIsConnected(false)
         };
 
         ws.current.onerror = (error) => {
@@ -59,6 +59,26 @@ const App: React.FC = () => {
         messagesEndRef.current?.scrollIntoView({behavior: 'smooth'});
     }, [messages]);
 
+    const sendMessage = (type: string, message: string, avatarUrl: string, from: string) => {
+        const messageData = {
+            type: type,
+            message: message,
+            to: currentTab,
+            timestamp: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}),
+            avatarUrl: avatarUrl,
+            from: from,
+            toChat: true
+        };
+        ws.current?.send(JSON.stringify(messageData));
+        setMessages((prevMessages) => [...prevMessages, messageData]);
+    }
+    const onChangeTool = (value: boolean, idTool: string) => {
+        ws.current?.send(JSON.stringify({
+            type: 'TOOL_CHANGE',
+            idTool: idTool,
+            value: value
+        }));
+    }
     const handleSendMessage = () => {
         if (input.trim() !== '') {
             if (currentTab === 'iara') {
@@ -132,7 +152,9 @@ const App: React.FC = () => {
                     username={username}
 
                 />
-                <ModalTools tools={tools} openModal={openModal} onClose={() => setOpenModal(false)}/>
+                <ModalTools
+                    onChange={onChangeTool}
+                    tools={tools} openModal={openModal} onClose={() => setOpenModal(false)}/>
                 <Tabs tabs={tabs} currentTab={currentTab} onChange={handleTabChange}/>
 
                 <Box style={{flex: 1, overflow: 'hidden'}}>
@@ -166,10 +188,14 @@ const App: React.FC = () => {
                                 })}
                             <div ref={messagesEndRef}/>
                         </Box>
-                        <BotlandiaChatInput input={input}
-                                            setInput={setInput}
-                                            handleKeyPress={handleKeyPress}
-                                            handleSendMessage={handleSendMessage}/>
+                        {
+                            isConnected ? (
+                                <BotlandiaChatInput input={input}
+                                                    setInput={setInput}
+                                                    handleKeyPress={handleKeyPress}
+                                                    handleSendMessage={handleSendMessage}/>
+                            ) : (<div className="not-connected">nao conectado</div>)
+                        }
                     </Box>
                 </Box>
             </Box>

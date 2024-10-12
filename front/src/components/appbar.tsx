@@ -16,6 +16,8 @@ export interface AppbarProps {
 
 const BotlandiaAppBar: React.FC<AppbarProps> = ({
                                                     handleOpenModal,
+                                                    avatarSrc,
+                                                    username,
                                                 }) => {
     return (
         <AppBar position="static" color="primary" elevation={4}>
@@ -28,6 +30,15 @@ const BotlandiaAppBar: React.FC<AppbarProps> = ({
                 <IconButton onClick={handleOpenModal} color="secondary" aria-label="add an alarm">
                     <HardwareIcon/>
                 </IconButton>
+
+                <Avatar
+                    alt={username}
+                    src={avatarSrc}
+                    onClick={handleOpenModal}
+                    sx={{cursor: 'pointer'}}
+                >
+                    {username.charAt(0).toUpperCase()}
+                </Avatar>
             </Toolbar>
         </AppBar>
     );

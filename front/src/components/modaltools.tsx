@@ -9,9 +9,10 @@ import {
 import ConstructionIcon from "@mui/icons-material/Construction";
 
 export interface BaseProps {
-    openModal:boolean;
-    onClose:(value:boolean) => void;
-    tools:any[]
+    openModal: boolean;
+    onClose: (value: boolean) => void;
+    onChange: (value: boolean, idTool: string) => void;
+    tools: any[]
 }
 
 const ModalTools: React.FC<BaseProps> = (props: BaseProps) => {
@@ -72,6 +73,9 @@ const ModalTools: React.FC<BaseProps> = (props: BaseProps) => {
                                             <Typography variant="body2">{tool.description}</Typography>
                                         </Box>
                                     </CardContent>
+                                    <Switch onClick={() => {
+                                        props.onChange(!tool.enable, tool.uuid)
+                                    }} checked={tool.enable} color="secondary"/>
                                     <CardActions>
 
                                     </CardActions>

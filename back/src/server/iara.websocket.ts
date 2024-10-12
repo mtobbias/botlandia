@@ -10,6 +10,7 @@ import {Incarnations} from "botlandia/core/soul/incarnations";
 import {RabbitUtil} from "botlandia/utils/rabbit.util";
 import {AVATARS, NAMES} from "botlandia/utils/names";
 import {getActiveProfile} from "botlandia/utils/agentUtils";
+import {WS_STATUS} from "botlandia/index";
 
 dotenv.config();
 
@@ -29,31 +30,31 @@ export class IaraWebSocket {
         origin: any,
         anyone: Anyone
     }> = new Map();
-
+    private listOfTools;//this.toolStore.forIara();
     constructor(port: number) {
         Logger.info(`Iniciando servidor WebSocket na porta ${port}...`);
-        this.iaraAgent = new BuilderAnyone()
-            .withRole(Incarnations.iara.role)
-            .withBrain(BrainType.OLLAMA)
-            .withName(Incarnations.iara.name)
-            .withAllTool([])
-            .withThisIncarnation(Incarnations.iara.description)
-            .build();
-
         this.webSocketServer = new WebSocketServer({port}, () => {
             Logger.success(`Servidor WebSocket iniciado com sucesso na porta ${port}!`);
         });
 
         this.attachListeners();
-        this.rabbitUtil.consume('WHATSAPP_IN', async (msg) => {
+        this.rabbitUtil.consume(RabbitUtil.WHATSAPP_IN, async (msg) => {
             try {
-                console.log('WHATSAPP_IN', msg.content.toString())
                 await this.notifyWhatsapp(msg.content.toString())
             } catch (err: any) {
                 console.error(err)
             }
         })
-        this.rabbitUtil.consume('WHATSAPP_READY', async (msg) => {
+        this.listOfTools = this.toolStore.forAnyone().map((t) => {
+            return {
+                uuid: t?.uuid,
+                name: t?.name,
+                description: t?.description,
+                enable: false,
+            }
+        })
+
+        this.rabbitUtil.consume(RabbitUtil.WHATSAPP_READY, async (msg) => {
             try {
                 Logger.info(`WHATSAPP_READY  ${msg}`);
                 await this.sendInformation('Whatsapp está pronto')
@@ -61,7 +62,12 @@ export class IaraWebSocket {
             } catch (err: any) {
             }
         })
-
+        this.iaraAgent = new BuilderAnyone()
+            .withRole(Incarnations.iara.role)
+            .withBrain(BrainType.OPEN_AI)
+            .withName(Incarnations.iara.name)
+            .withThisIncarnation(Incarnations.iara.description)
+            .build();
 
     }
 
@@ -81,13 +87,10 @@ export class IaraWebSocket {
         this.webSocketServer.on(EVENTS_WS.CLOSE, () => {
             Logger.warn(`Servidor WebSocket encerrado.`);
         });
-        // await this.updateAgent()
     }
 
     private async onConnection(ws: any) {
-
         const clientId = uuidv4();
-        Logger.info(`Novo cliente conectado (ID: ${clientId}).`);
         ws.on(EVENTS_WS.MESSAGE, this.onMessage.bind(this, ws, clientId));
         ws.on(EVENTS_WS.CLOSE, () => {
             Logger.info(`Cliente desconectado (ID: ${clientId}).`);
@@ -98,32 +101,34 @@ export class IaraWebSocket {
     }
 
     private async onMessage(client: WebSocket, clientId: string, message: string) {
-        Logger.debug(`Mensagem recebida do cliente (ID: ${clientId}): ${message}`);
         try {
             const data: any = JSON.parse(message);
-             const tools  = this.toolStore.forIara();
-            if (data.type === 'GIVE_ME_TOOLS' && tools.length>0) {
-                const mapTools = tools.map((t) => {
-                    return {
-                        uuid: t?.uuid,
-                        name: t?.name,
-                        description: t?.description
-                    }
-                })
+
+            if (data.type === WS_STATUS.GIVE_ME_TOOLS && this.listOfTools.length > 0) {
                 const broadcastData = {
-                    type: 'GIVE_ME_TOOLS_RESPONSE',
-                    tools: mapTools
+                    type: WS_STATUS.GIVE_ME_TOOLS_RESPONSE,
+                    tools: this.listOfTools
                 };
-                Logger.debug(`Enviando resposta para o cliente (ID: ${clientId}): ${JSON.stringify(broadcastData)}`);
                 client.send(JSON.stringify(broadcastData));
             }
-            if (data.type === 'NEW_MESSAGE') {
-                Logger.info(`Processando mensagem do cliente (ID: ${clientId})...`);
+            if (data.type === WS_STATUS.NEW_MESSAGE) {
                 const resp = await this.processMessage(data.message);
                 await this.sendNewMessage(clientId, 'me', this.iaraAgent.getName().toLowerCase(), 'iara.png', resp, this.iaraAgent.getName(), client, false)
             }
-            if (data.type === 'NEW_MESSAGE_HUMAN') {
-                Logger.info(`Processando mensagem do cliente (ID: ${clientId})...`);
+            if (data.type === WS_STATUS.TOOL_CHANGE) {
+                const tool = this.listOfTools.filter((t) => t.uuid === data.idTool)[0]
+                const newList = this.listOfTools.filter((t) => t.uuid !== data.idTool)
+                if (tool) {
+                    tool.enable = data.value
+                    this.listOfTools = [...newList, tool]
+                }
+                const broadcastData = {
+                    type: WS_STATUS.GIVE_ME_TOOLS_RESPONSE,
+                    tools: this.listOfTools
+                };
+                client.send(JSON.stringify(broadcastData));
+            }
+            if (data.type === WS_STATUS.NEW_MESSAGE_HUMAN) {
                 const agent = this.listOfAgents.get(data.to)
                 if (agent) {
                     agent.anyone.addChatAssistant(data.message)
@@ -131,11 +136,9 @@ export class IaraWebSocket {
                         origin: agent.origin,
                         response: data.message
                     })
-                    await this.rabbitUtil.publish('WHATSAPP_OUT', message)
+                    await this.rabbitUtil.publish(RabbitUtil.WHATSAPP_OUT, message)
 
                 }
-                // const resp = await this.processMessage(data.message);
-                //await this.sendNewMessage(clientId, 'me', this.iaraAgent.getName().toLowerCase(), 'iara.png', resp, this.iaraAgent.getName(), client, false)
             }
         } catch (error) {
             Logger.error(`Erro ao processar a mensagem do cliente (ID: ${clientId}): ${error}`);
@@ -144,7 +147,7 @@ export class IaraWebSocket {
 
     private async sendNewMessage(id: any, to: any, from: any, avatarUrl: any, message: any, username: any, client: WebSocket, toChat: boolean) {
         const timelineEvent = {
-            type: 'NEW_MESSAGE',
+            type: WS_STATUS.NEW_MESSAGE,
             id: id,
             to: to,
             from: from,
@@ -170,7 +173,7 @@ export class IaraWebSocket {
             return
         }
         const timelineEvent = {
-            type: 'TIMELINE_EVENT',
+            type: WS_STATUS.NEW_MESSAGE,
             id: uuidv4(),
             content: said.toString(),
             squad: squad,
@@ -186,9 +189,10 @@ export class IaraWebSocket {
     };
 
     private async processMessage(message: any): Promise<string> {
-        Logger.debug(`Enviando mensagem para o agente Iara: ${message}`);
+        const idTools = this.listOfTools.filter((t) => t.enable).map((t) => t.uuid);
+        const toolsToNow = this.toolStore.forAnyone().filter((f) => idTools.includes(f.uuid));
+        this.iaraAgent.useTools(toolsToNow)
         const response = await this.iaraAgent.solveThat(message, this.callBackLog.bind(this));
-        Logger.debug(`Resposta do agente Iara: ${JSON.stringify(response)}`);
         return response.bill.answer.content || '';
     };
 
@@ -197,9 +201,10 @@ export class IaraWebSocket {
         const indexAvatar = Math.floor(Math.random() * AVATARS.length);
         if (!this.listOfAgents.has(args.from)) {
             let profile;
-            try{
-                 profile = await getActiveProfile()
-            }catch (err){}
+            try {
+                profile = await getActiveProfile()
+            } catch (err) {
+            }
 
             if (!profile) {
                 await this.sendInformation('Não existe perfil criado para responder no whatsapp, o perfil "Iara" está sendo usado, crie um perfil')
@@ -212,7 +217,6 @@ export class IaraWebSocket {
                 .withAllTool(this.toolStore.forIara())
                 .withThisIncarnation(`
                 ${profile?.description || Incarnations.iara.description}
-                
                 SEU NOME É : ${profile?.name || NAMES[indexName]}
                 ESTÁ FALANDO COM : ${args?.username}
                 `)
@@ -230,7 +234,7 @@ export class IaraWebSocket {
             origin: args.id,
             response: responseBody
         })
-        await this.rabbitUtil.publish('WHATSAPP_OUT', message)
+        await this.rabbitUtil.publish(RabbitUtil.WHATSAPP_OUT, message)
 
         this.webSocketServer.clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {

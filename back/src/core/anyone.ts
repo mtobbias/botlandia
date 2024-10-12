@@ -7,7 +7,7 @@ import {Logger} from "botlandia/utils/logger";
 export class Anyone {
     private brain: IBrain;
     private readonly billAnyone: IBillAnyone;
-    private readonly tools: ITool[];
+    private tools: ITool[];
     private readonly role: string;
     private readonly name: string;
     private avatarUrl?: string;
@@ -197,5 +197,10 @@ export class Anyone {
      */
     addChatAssistant(message: string) {
         this.brain.addChatAssistant(message)
+    }
+
+    useTools(toolsToNow: ITool[]) {
+        this.tools = [];
+        this.tools.push(...toolsToNow)
     }
 }
