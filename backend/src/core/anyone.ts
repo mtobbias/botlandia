@@ -1,5 +1,5 @@
 import {IBill, IBillAnyone, IBrain, ITool, ILog} from "./interfaces";
-import {Logger} from "../../../api-whatsapp/src/logger";
+import {Logger} from "botlandia/utils/logger";
 
 /**
  * Interface para o argumento da função de callback de log.

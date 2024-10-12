@@ -2,7 +2,7 @@ import OpenAI from "openai";
 // @ts-ignore
 import * as dotenv from "dotenv";
 import {Brain} from "botlandia/core/brain";
-import {Logger} from "../../../../api-whatsapp/src/logger";
+import {Logger} from "botlandia/utils/logger";
 import {Answer, IBill, IBrain, ITool} from "botlandia/core/interfaces";
 
 export class OpenaiBrain extends Brain implements IBrain {

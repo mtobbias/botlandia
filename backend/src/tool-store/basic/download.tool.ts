@@ -2,7 +2,7 @@ import axios from "axios";
 import fs from "fs";
 import path from "path";
 import { Tool } from "botlandia/core/tools";
-import {Logger} from "../../../../api-whatsapp/src/logger";
+import {Logger} from "botlandia/utils/logger";
 
 interface DownloadToolArgs {
     url: string;

@@ -3,7 +3,7 @@ import fs from "fs/promises";
 import path from "path";
 import os from "os";
 import {Tool} from "botlandia/core/tools";
-import {Logger} from "../../../../api-whatsapp/src/logger";
+import {Logger} from "botlandia/utils/logger";
 
 interface PuppeteerToolArgs {
     action:

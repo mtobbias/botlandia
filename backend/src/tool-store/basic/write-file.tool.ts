@@ -1,6 +1,6 @@
 import {promises as fs} from "fs";
 import {Tool} from "botlandia/core/tools";
-import {Logger} from "../../../../api-whatsapp/src/logger";
+import {Logger} from "botlandia/utils/logger";
 import * as path from "path";
 
 interface WriteFileToolArgs {

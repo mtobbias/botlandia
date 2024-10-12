@@ -4,7 +4,7 @@ import {
 } from "@google/generative-ai";
 import {Brain} from "botlandia/core/brain";
 import {Answer, FieldTool, ITool} from "botlandia/core/interfaces";
-import {Logger} from "../../../../api-whatsapp/src/logger";
+import {Logger} from "botlandia/utils/logger";
 
 export class GoogleBrain extends Brain {
     genAI?: GoogleGenerativeAI;

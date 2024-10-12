@@ -3,7 +3,7 @@ version: '3.8'
 services:
   botlandia-frontend:
     build:
-      context: ./front  # Caminho para o diretório do seu aplicativo React
+      context: ./frontend  # Caminho para o diretório do seu aplicativo React
       dockerfile: Dockerfile    # Nome do Dockerfile (caso seja diferente, ajuste aqui)
     container_name: botlandia-front
     env_file:
@@ -20,7 +20,7 @@ services:
     build:
       context: backend
       dockerfile: Dockerfile
-    container_name: botlandia-backendend
+    container_name: botlandia-backend
     ports:
       - "3001:3001"
     env_file:

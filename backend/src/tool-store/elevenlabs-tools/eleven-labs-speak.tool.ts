@@ -1,6 +1,6 @@
 import {ElevenLabsClient, play} from "elevenlabs";
 import {Tool} from "botlandia/core/tools";
-import {Logger} from "../../../../api-whatsapp/src/logger";
+import {Logger} from "botlandia/utils/logger";
 
 interface SpeakToolArgs {
     speak: string;

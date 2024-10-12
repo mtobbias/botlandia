@@ -1,7 +1,7 @@
 import {Anyone} from "botlandia/core/anyone";
 import {ITool} from "botlandia/core/interfaces";
-import {Logger} from "../../../api-whatsapp/src/logger";
 import {BuilderFieldTool, BuilderTools} from "botlandia/core/builders/builder.tools";
+import {Logger} from "botlandia/utils/logger";
 
 export class Squad {
     analyst: Anyone;

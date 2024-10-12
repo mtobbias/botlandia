@@ -1,7 +1,7 @@
 // @ts-ignore
 import {createConnection, Connection} from "mysql2/promise";
 import {Tool} from "botlandia/core/tools";
-import {Logger} from "../../../../api-whatsapp/src/logger";
+import {Logger} from "botlandia/utils/logger";
 
 interface MySQLAdminToolArgs {
     action:

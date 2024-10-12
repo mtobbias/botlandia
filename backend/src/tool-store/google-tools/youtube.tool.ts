@@ -1,6 +1,6 @@
 import {google, youtube_v3} from "googleapis";
 import {Tool} from "botlandia/core/tools";
-import {Logger} from "../../../../api-whatsapp/src/logger";
+import {Logger} from "botlandia/utils/logger";
 
 interface YouTubeToolArgs {
     action: "searchVideos" | "getVideoDetails";

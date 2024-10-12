@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 import WebSocket, {WebSocketServer} from "ws";
 import {Anyone} from "botlandia/core/anyone";
-import {Logger} from "../../../api-whatsapp/src/logger";
+import {Logger} from "botlandia/utils/logger";
 import {BuilderAnyone} from "botlandia/core/builders/builder.anyone";
 import {BrainType} from "botlandia/core/enums";
 import {v4 as uuidv4} from "uuid";
