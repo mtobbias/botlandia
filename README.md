@@ -1,4 +1,4 @@
-<img src="front/public/logo.png"/>
+<img src="./environment/docs/logo.png"/>
 
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)
@@ -59,7 +59,7 @@ Botlandia é um projeto pessoal de um assistente para facilitar o dia a dia.
 
 ---
 
-# <img src="front/public/iara.png" alt="Iara Banner" width="42"/> Iara
+# <img src="./environment/docs/iara.png" alt="Iara Banner" width="42"/> Iara
 
 ### Assistente Pessoal Principal
 
