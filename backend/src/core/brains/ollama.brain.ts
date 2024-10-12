@@ -11,7 +11,7 @@ export class OllamaBrain extends Brain implements IBrain {
 
     private initializeLLM = (): any => {
         dotenv.config();
-        return new Ollama({host: process.env.BOTLANDIA_BOTLANDIA_OLLAMA_URL});
+        return new Ollama({host: process.env.BOTLANDIA_OLLAMA_URL});
     };
 
     private getOllamaClient(): Ollama {
