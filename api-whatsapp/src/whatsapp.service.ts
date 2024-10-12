@@ -1,9 +1,9 @@
-// src/services/WhatsAppService.ts
 import {Request, Response} from "express";
-import {IClientWhatsApp} from "@whatsapp/whatsapp.interface";
-import {RabbitUtil} from "@whatsapp/rabbit.util";
-import {ClientWhatsapp} from "@whatsapp/whatsapp.client";
-import {WhatsAppController} from "@whatsapp/whatsapp.controller";
+import {IClientWhatsApp} from "botlandia/api/whatsapp/whatsapp.interface";
+import {RabbitUtil} from "botlandia/api/whatsapp/rabbit.util";
+import {ClientWhatsapp} from "botlandia/api/whatsapp/whatsapp.client";
+import {Logger} from "botlandia/api/whatsapp/logger";
+import {WhatsAppController} from "botlandia/api/whatsapp/whatsapp.controller";
 
 export class WhatsAppService implements IClientWhatsApp {
     private rabbitUtil: RabbitUtil;
@@ -13,24 +13,20 @@ export class WhatsAppService implements IClientWhatsApp {
     constructor() {
         this.rabbitUtil = new RabbitUtil();
         this.qrCode = null;
-
-        // Instanciar o ClientWhatsapp com os handlers definidos na interface
-        this.clientWhatsapp = new ClientWhatsapp(this, "botland");
+        this.clientWhatsapp = new ClientWhatsapp(this, "botlandia");
     }
-
-    // Implementação dos métodos da interface IClientWhatsApp
 
     public async onQrcode(qr: string): Promise<void> {
         this.qrCode = qr;
-        console.log("QR Code atualizado.");
+        Logger.whatslog("QR Code atualizado.");
     }
 
     public async onReady(): Promise<void> {
         try {
             await this.rabbitUtil.publish('WHATSAPP_READY', 'WHATSAPP_READY');
-            console.log("WhatsApp está pronto e mensagem publicada no RabbitMQ.");
+            Logger.whatslog("WhatsApp está pronto e mensagem publicada no RabbitMQ.");
         } catch (err: any) {
-            console.error("Erro ao publicar WHATSAPP_READY:", err);
+            Logger.error("Erro ao publicar WHATSAPP_READY:", err);
         }
     }
 
@@ -51,19 +47,19 @@ export class WhatsAppService implements IClientWhatsApp {
                 avatarUrl,
             };
             await this.rabbitUtil.publish('WHATSAPP_IN', JSON.stringify(response));
-            console.log("Mensagem recebida e publicada no WHATSAPP_IN:", response);
+            Logger.whatslog("Mensagem recebida e publicada no WHATSAPP_IN:", response);
         } catch (err: any) {
-            console.error("Erro ao tratar mensagem recebida:", err);
+            Logger.error("Erro ao tratar mensagem recebida:", err);
         }
     }
 
     public onJoinGroup(opts: any): void {
-        console.log("Entrou em um grupo:", opts);
+        Logger.whatslog("Entrou em um grupo:", opts);
         // Implementar lógica adicional se necessário
     }
 
     public onLeaveGroup(opts: any): void {
-        console.log("Saiu de um grupo:", opts);
+        Logger.whatslog("Saiu de um grupo:", opts);
         // Implementar lógica adicional se necessário
     }
 
@@ -81,14 +77,14 @@ export class WhatsAppService implements IClientWhatsApp {
                 try {
                     const msgObj = JSON.parse(msg.content.toString());
                     await controller.sendMessageObj(msgObj);
-                    console.log("Mensagem consumida do WHATSAPP_OUT e enviada:", msgObj);
+                    Logger.whatslog("Mensagem consumida do WHATSAPP_OUT e enviada:", msgObj);
                 } catch (err: any) {
-                    console.error("Erro ao consumir mensagem WHATSAPP_OUT:", err);
+                    Logger.error("Erro ao consumir mensagem WHATSAPP_OUT:", err);
                 }
             });
-            console.log("Consumo do RabbitMQ inicializado para WHATSAPP_OUT.");
+            Logger.whatslog("Consumo do RabbitMQ inicializado para WHATSAPP_OUT.");
         } catch (err: any) {
-            console.error("Erro ao inicializar consumo do RabbitMQ:", err);
+            Logger.error("Erro ao inicializar consumo do RabbitMQ:", err);
         }
     }
 

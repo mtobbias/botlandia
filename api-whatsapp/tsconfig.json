@@ -8,7 +8,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "paths": {
-      "@whatsapp/*": [
+      "botlandia/api/whatsapp/*": [
         "./src/*"
       ]
     }

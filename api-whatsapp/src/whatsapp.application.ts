@@ -1,25 +1,21 @@
 import express, {Application} from "express";
 import bodyParser from "body-parser";
-import {WhatsAppService} from "@whatsapp/whatsapp.service";
-import {WhatsAppController} from "@whatsapp/whatsapp.controller";
+import {WhatsAppService} from "botlandia/api/whatsapp/whatsapp.service";
+import {WhatsAppController} from "botlandia/api/whatsapp/whatsapp.controller";
+import {Logger} from "botlandia/api/whatsapp/logger";
 
 class WhatsappApplication {
     public app: Application;
-    private port: number;
-    private whatsappService: WhatsAppService;
-    private whatsappController: WhatsAppController;
+    private readonly port: number;
+    private readonly whatsappService: WhatsAppService;
+    private readonly whatsappController: WhatsAppController;
 
     constructor() {
         this.app = express();
         this.port = parseInt(process.env.PORT || "3002", 10);
         this.configMiddleware();
-
-        // Instanciar WhatsAppService
         this.whatsappService = new WhatsAppService();
-
-        // Instanciar WhatsAppController com o WhatsAppService
         this.whatsappController = new WhatsAppController(this.whatsappService);
-
         this.setupRoutes();
     }
 
@@ -45,7 +41,7 @@ class WhatsappApplication {
 
     public start(): void {
         this.app.listen(this.port, () => {
-            console.log(`Server running on http://localhost:${this.port}`);
+            Logger.whatslog(`Server running on http://localhost:${this.port}`)
             this.whatsappService.initializeRabbitMQ(this.whatsappController);
         });
     }

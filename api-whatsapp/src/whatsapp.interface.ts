@@ -1,4 +1,3 @@
-// src/interfaces/whatsapp.interface.ts
 export interface IClientWhatsApp {
     onQrcode: (qr: string) => Promise<void>;
     onReady: () => Promise<void>;

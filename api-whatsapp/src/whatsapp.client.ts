@@ -4,7 +4,8 @@ import fs from "fs";
 import mime from "mime-types";
 import axios from "axios";
 import os from "os";
-import {IClientWhatsApp} from "@whatsapp/whatsapp.interface";
+import {Logger} from "botlandia/api/whatsapp/logger";
+import {IClientWhatsApp} from "botlandia/api/whatsapp/whatsapp.interface";
 
 export class ClientWhatsapp {
     private client: Client | undefined;
@@ -13,15 +14,15 @@ export class ClientWhatsapp {
         private readonly iClientWhatsApp: IClientWhatsApp,
         private readonly clientId: string
     ) {
-        console.info(`[${this.clientId}] Initializing WhatsApp client...`);
+        Logger.whatslog(`[${this.clientId}] Initializing WhatsApp client...`);
         this.init();
     }
 
     private async init() {
-        console.log('Sistema Operacional:', os.type());
+        Logger.whatslog('Sistema Operacional:', os.type());
 
         try {
-            console.info(`[${this.clientId}] Initializing client...`);
+            Logger.whatslog(`[${this.clientId}] Initializing client...`);
             this.client = new Client({
                 puppeteer: {
                     headless: true,
@@ -35,43 +36,43 @@ export class ClientWhatsapp {
             this.registerEvents();
             await this.client.initialize();
         } catch (error) {
-            console.error(`[${this.clientId}] Initialization error:`, error);
+            Logger.error(`[${this.clientId}] Initialization error:`, error);
         }
     }
 
     private registerEvents() {
         if (this.client) {
             this.client.on("qr", (qr) => {
-                console.info(`[${this.clientId}] New QR Code generated.`);
+                Logger.whatslog(`[${this.clientId}] New QR Code generated.`);
                 this.iClientWhatsApp.onQrcode(qr);
             });
 
             this.client.on("ready", () => {
-                console.info(`[${this.clientId}] WhatsApp client is ready!`);
+                Logger.whatslog(`[${this.clientId}] WhatsApp client is ready!`);
                 this.iClientWhatsApp.onReady();
             });
 
             this.client.on("message", async (msg) => {
-                console.info(`[${this.clientId}] New message received:`, msg.body);
+                Logger.whatslog(`[${this.clientId}] New message received:`, msg.body);
                 this.iClientWhatsApp.onMessage(msg);
             });
 
             this.client.on("remote_session_saved", () => {
-                console.info(`[${this.clientId}] Remote session saved.`);
+                Logger.whatslog(`[${this.clientId}] Remote session saved.`);
             });
 
             this.client.on("group_join", (opts) => {
-                console.info(`[${this.clientId}] Joined group:`, opts);
+                Logger.whatslog(`[${this.clientId}] Joined group:`, opts);
                 this.iClientWhatsApp.onJoinGroup(opts);
             });
 
             this.client.on("group_leave", (opts) => {
-                console.info(`[${this.clientId}] Left group:`, opts);
+                Logger.whatslog(`[${this.clientId}] Left group:`, opts);
                 this.iClientWhatsApp.onLeaveGroup(opts);
             });
 
             this.client.on("group_update", (opts) => {
-                console.info(`[${this.clientId}] Group updated:`, opts);
+                Logger.whatslog(`[${this.clientId}] Group updated:`, opts);
             });
         }
     }
@@ -93,10 +94,10 @@ export class ClientWhatsapp {
                 throw new Error('Número completo inválido, DDI+PHONE');
             }
 
-            console.info(`[${this.clientId}] Sending message to ${newNumber}: ${msg}`);
+            Logger.whatslog(`[${this.clientId}] Sending message to ${newNumber}: ${msg}`);
             await this.client.sendMessage(this.preNumber(newNumber), msg);
         } catch (error) {
-            console.error(`[${this.clientId}] Error sending message:`, error);
+            Logger.error(`[${this.clientId}] Error sending message:`, error);
             throw new Error('Número completo inválido, DDI+PHONE');
         }
     }
@@ -126,7 +127,7 @@ export class ClientWhatsapp {
                 dataMime = await this.fileToBase64WithMime(attachment);
             }
 
-            console.info(`[${this.clientId}] Sending message with attachment to ${newNumber}: ${message}`);
+            Logger.whatslog(`[${this.clientId}] Sending message with attachment to ${newNumber}: ${message}`);
             const media = new MessageMedia(dataMime.mimeType, dataMime.data, attachment);
 
             if (dataMime.mimeType.toString().includes("octet-stream")) {
@@ -137,7 +138,7 @@ export class ClientWhatsapp {
             await this.client.sendMessage(this.preNumber(newNumber), media, {caption: message});
 
         } catch (error) {
-            console.error(`[${this.clientId}] Error sending message with attachment:`, error);
+            Logger.error(`[${this.clientId}] Error sending message with attachment:`, error);
             throw new Error('Erro ao enviar mensagem com anexo.');
         }
     }
@@ -173,14 +174,14 @@ export class ClientWhatsapp {
             throw new Error("client not found");
         }
         try {
-            console.info(`[${this.clientId}] Fetching groups...`);
+            Logger.whatslog(`[${this.clientId}] Fetching groups...`);
             const chats = await this.client.getChats();
             return chats.filter(chat => chat.isGroup).map(chat => ({
                 id: chat.id._serialized,
                 name: chat.name
             }));
         } catch (error) {
-            console.error(`[${this.clientId}] Error fetching groups:`, error);
+            Logger.error(`[${this.clientId}] Error fetching groups:`, error);
             return [];
         }
     }
@@ -190,7 +191,7 @@ export class ClientWhatsapp {
             throw new Error("client not found");
         }
         try {
-            console.info(`[${this.clientId}] Fetching contacts...`);
+            Logger.whatslog(`[${this.clientId}] Fetching contacts...`);
             const wContacts = await this.client.getContacts();
             return wContacts.filter((c) => c.id.server === 'c.us').map((c) => ({
                 name: c.name,
@@ -204,7 +205,7 @@ export class ClientWhatsapp {
                 verifiedName: c.verifiedName
             }));
         } catch (error) {
-            console.error(`[${this.clientId}] Error fetching contacts:`, error);
+            Logger.error(`[${this.clientId}] Error fetching contacts:`, error);
             return [];
         }
     }
@@ -218,7 +219,7 @@ export class ClientWhatsapp {
             throw new Error("client not found");
         }
         try {
-            console.info(`[${this.clientId}] Sending message to group ${groupId}: ${msg}`);
+            Logger.whatslog(`[${this.clientId}] Sending message to group ${groupId}: ${msg}`);
             const groupID = `${groupId}@g.us`;
             const contacts = await this.client.getContacts();
             const mentions = contacts.filter(contact => listOfMentions?.includes(contact.id.user)) as any;
@@ -226,7 +227,7 @@ export class ClientWhatsapp {
 
             await this.client.sendMessage(groupID, `${msg} ${mentionsMessage}`, {mentions});
         } catch (error) {
-            console.error(`[${this.clientId}] Error sending message to group:`, error);
+            Logger.error(`[${this.clientId}] Error sending message to group:`, error);
             throw new Error('Erro ao enviar mensagem para o grupo.');
         }
     }

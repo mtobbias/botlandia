@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
-import WhatsappApplication from "@whatsapp/whatsapp.application";
+import WhatsappApplication from "botlandia/api/whatsapp/whatsapp.application";
+import {Logger} from "botlandia/api/whatsapp/logger";
 dotenv.config();
-
-const appInstance = new WhatsappApplication();
-appInstance.start();
+const whatsappApplication = new WhatsappApplication();
+whatsappApplication.start();
