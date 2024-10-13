@@ -16,7 +16,7 @@ interface YouTubeToolArgs {
 
 export class YouTubeTool extends Tool {
     static UUID = "d957c2c8-9758-4142-af9d-d6941040f9b5";
-    private youtube: youtube_v3.Youtube;
+    private youtube: youtube_v3.Youtube | undefined;
 
     constructor() {
         super(
@@ -75,15 +75,6 @@ export class YouTubeTool extends Tool {
             description: "Filtrar vídeos que podem ser incorporados ('true' ou 'false'). Padrão para 'true' (opcional)."
         });
 
-        // Inicializa o cliente do YouTube
-        const apiKey = process.env.BOTLANDIA_BACKEND_GOOGLE_YOUTUBE_KEY;
-        if (!apiKey) {
-            throw new Error(
-                "Chave de API do YouTube ausente. Por favor, defina BOTLANDIA_BACKEND_GOOGLE_YOUTUBE_KEY nas variáveis de ambiente."
-            );
-        }
-
-        this.youtube = google.youtube({version: "v3", auth: apiKey});
     }
 
     /**
@@ -92,6 +83,19 @@ export class YouTubeTool extends Tool {
      * @returns Uma promessa que resolve com o resultado da operação ou rejeita com um erro.
      */
     async run(arg: string): Promise<any> {
+        const apiKey = process.env.BOTLANDIA_BACKEND_GOOGLE_YOUTUBE_KEY;
+        if (!apiKey) {
+            throw new Error(
+                "Chave de API do YouTube ausente. Por favor, defina BOTLANDIA_BACKEND_GOOGLE_YOUTUBE_KEY nas variáveis de ambiente."
+            );
+        }
+        this.youtube = google.youtube({version: "v3", auth: apiKey});
+        if (!this.youtube) {
+            throw new Error(
+                "Chave de API do YouTube ausente. Por favor, defina BOTLANDIA_BACKEND_GOOGLE_YOUTUBE_KEY nas variáveis de ambiente."
+            );
+        }
+
         Logger.toolSaid(this.name, `Executando com os argumentos: ${arg}`);
         let objArgs: YouTubeToolArgs;
         try {
@@ -167,6 +171,11 @@ export class YouTubeTool extends Tool {
         videoEmbeddable?: boolean
     ): Promise<youtube_v3.Schema$SearchResult[]> {
         try {
+            if (!this.youtube) {
+                throw new Error(
+                    "Chave de API do YouTube ausente. Por favor, defina BOTLANDIA_BACKEND_GOOGLE_YOUTUBE_KEY nas variáveis de ambiente."
+                );
+            }
             const res = await this.youtube.search.list({
                 part: "snippet",
                 q: query,
@@ -201,6 +210,11 @@ export class YouTubeTool extends Tool {
      */
     private async getVideoDetails(videoId: string): Promise<youtube_v3.Schema$Video[]> {
         try {
+            if (!this.youtube) {
+                throw new Error(
+                    "Chave de API do YouTube ausente. Por favor, defina BOTLANDIA_BACKEND_GOOGLE_YOUTUBE_KEY nas variáveis de ambiente."
+                );
+            }
             const res = await this.youtube.videos.list({
                 part: "snippet,contentDetails,statistics",
                 id: videoId,
