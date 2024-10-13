@@ -21,8 +21,8 @@ const BotlandiaAppBar: React.FC<AppbarProps> = ({
         <AppBar position="static" color="primary" elevation={4}>
             <Toolbar>
                 <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <img src={'logo.png'} width={'100rem'}/>
+                    <Grid item xs={12} >
+                        <img src={'logo.png'} width={'120rem'}/>
                     </Grid>
                 </Grid>
                 <IconButton onClick={handleOpenModal} color="secondary" aria-label="add an alarm">
