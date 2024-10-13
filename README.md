@@ -37,17 +37,10 @@ Botlandia é um projeto pessoal de um assistente para facilitar o dia a dia.
       implicar em riscos de bloqueio da conta se os termos de uso forem violados.
 
 - **back/** 🖥️
-    - **Backend em Node.js:** Desenvolvido com **Node.js** e **Express** para garantir um desempenho robusto.
-    - **Lógica de Negócios:** Gerencia as regras de negócios e processos internos da aplicação.
-    - **Integração com Bancos de Dados:** Conecta-se a MongoDB, SQLite ou MySQL para armazenamento eficiente de dados.
-    - **MemoryTool:** Ferramenta para gerenciar a memória e personalizar as interações com os usuários, proporcionando
-      uma experiência mais dinâmica.
+    - **Backend em Node.js
 
 - **front/** 🎨
-    - **Frontend em React:** Construído com **React** para oferecer uma interface de usuário intuitiva e responsiva.
-    - **Experiência do Usuário:** Proporciona uma navegação fluida e amigável para interagir com a aplicação.
-    - **Integração com Backend:** Conecta-se perfeitamente com as funcionalidades do backend, garantindo uma experiência
-      de uso coesa e eficiente.
+    - **Frontend em React:
 
 - **docker-compose.yml** 🐳
     - **Orquestração de Serviços:** Utiliza **Docker Compose** para integrar e gerenciar todos os serviços necessários
