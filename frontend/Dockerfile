@@ -1,5 +1,5 @@
 # Etapa 1: Construir a aplicação
-FROM node:18-alpine AS builder
+FROM nginx:stable-alpine AS builder
 
 # Definir o diretório de trabalho
 WORKDIR /app
