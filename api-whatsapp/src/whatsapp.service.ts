@@ -71,7 +71,7 @@ export class WhatsAppService implements IClientWhatsApp {
         if (this.qrCode) {
             res.send(this.qrCode);
         } else {
-            res.send('');
+            res.send('-- SEM QRCODE --');
         }
     }
 

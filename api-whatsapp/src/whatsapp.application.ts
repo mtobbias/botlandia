@@ -14,9 +14,10 @@ class WhatsappApplication {
         this.app = express();
         this.port = parseInt(process.env.BOTLANDIA_API_WHATSAPP_PORT || "3002", 10);
         this.configMiddleware();
+        this.setupRoutes();
         this.whatsappService = new WhatsAppService();
         this.whatsappController = new WhatsAppController(this.whatsappService);
-        this.setupRoutes();
+
     }
 
     private configMiddleware(): void {

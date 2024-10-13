@@ -1,7 +1,11 @@
 #!/bin/bash
 
 echo "Starting Ollama server..."
-ollama serve &  # Start Ollama in the background
-
-echo "Ollama is ready, creating the model..."
-ollama run llama3.2:1b
+/bin/ollama serve &
+sleep 5
+echo "==================================================="
+echo "======              BOTLANDIA              ========"
+echo "==================================================="
+echo "======          AGUARDE O DOWNLOAD         ========"
+echo "==================================================="
+/bin/ollama run llama3.2
