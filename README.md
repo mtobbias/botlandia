@@ -26,6 +26,75 @@ Botlandia é um projeto pessoal de um assistente para facilitar o dia a dia.
 
 ---
 
+## Instalação
+```bash
+git clone https://github.com/mtobbias/botlandia.git
+```
+<img src="./environment/docs/001.png"/> 
+
+Entre no diretório do projeto
+```bash
+cd botlandia
+```
+
+No diretorio do projeto vai encontar um arquivo **env.docker-compose**
+
+<img src="./environment/docs/000.png"/> 
+
+```
+# =====================================
+# IARA
+# =====================================
+#BOTLANDIA_IARA_BRAIN=OPEN_AI
+#BOTLANDIA_IARA_BRAIN=OLLAMA
+#BOTLANDIA_IARA_BRAIN=GOOGLE
+#BOTLANDIA_IARA_BRAIN=GROQ
+BOTLANDIA_IARA_BRAIN=OLLAMA
+# =====================================
+#BOTLANDIA_IARA_BRAIN=GOOGLE
+#BOTLANDIA_IARA_BRAIN=GROQ
+# =====================================
+```
+>Por padrão, o projeto utiliza a versão OLLAMA llama3.2:1b, 
+> que não se mostrou eficaz na execução de ferramentas. 
+> Recomendo o OPEN_AI com gpt-4o-mini ou GOOGLE gemini-1.5-pro para modelos mais robustos.
+
+### ⚠️ Atenção ###
+> Para utilizar OPEN_AI, é necessário informar a chave em BOTLANDIA_BACKEND_OPENAI_KEY
+> https://platform.openai.com/playground
+
+
+> Para utilizar GOOGLE, é necessário informar a chave em BOTLANDIA_BACKEND_GOOGLE_GEMINI_KEY
+> https://aistudio.google.com/
+
+
+Agora execute o comando Docker para criar os containers, esse processo demora alguns minutos.
+
+>⚠️ Atenção:
+>O projeto contém um container chamado "botlandia-ollama", ele vai realizar o download da versão llama3.2:1b (aproximadamente 2GB). Para mudar a versão do modelo, edite o arquivo "botlandia-ollama/run_ollama.sh".
+>Veja mais em https://ollama.com/library/llama3.2.
+
+
+```bash
+docker compose up -d
+```
+<img src="./environment/docs/002.png"/> 
+
+Após a instalação, seu Docker deve estar assim:
+
+
+<img src="./environment/docs/003.png"/> 
+
+Abra o seu navegador:
+```bash
+http://localhost:8080/
+```
+
+<img src="./environment/docs/005.png"/> 
+
+## Pronto, agora é só usar ##
+
+---
 ### 📁 **Projetos**
 
 - **api-whatsapp/** 📱
@@ -37,10 +106,10 @@ Botlandia é um projeto pessoal de um assistente para facilitar o dia a dia.
       implicar em riscos de bloqueio da conta se os termos de uso forem violados.
 
 - **back/** 🖥️
-    - **Backend em Node.js
+    - Backend em Node.js/websocket
 
 - **front/** 🎨
-    - **Frontend em React:
+    - Frontend em React/websocket
 
 - **docker-compose.yml** 🐳
     - **Orquestração de Serviços:** Utiliza **Docker Compose** para integrar e gerenciar todos os serviços necessários
@@ -58,7 +127,7 @@ Botlandia é um projeto pessoal de um assistente para facilitar o dia a dia.
 
 O nome **IAra** foi escolhido em referência à figura mitológica brasileira.
 
-<img src="./environment/docs/001.png"/> 
+<img src="./environment/docs/005.png"/> 
 
 ## 🧰 Ferramentas Disponíveis
 
