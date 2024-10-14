@@ -2,6 +2,7 @@
 import sqlite3 from 'sqlite3';
 import {v4 as uuidv4} from 'uuid';
 import path from 'path';
+import {Logger} from "botlandia/utils/logger";
 
 sqlite3.verbose();
 
@@ -43,9 +44,9 @@ export class ToolsMemory {
         `;
         this.db.run(sql, (err: Error | null) => {
             if (err) {
-                console.error('Erro ao criar tabela:', err.message);
+                Logger.error('Erro ao criar tabela:', err.message);
             } else {
-                console.log('Tabela "items" pronta.');
+                Logger.info('Tabela "items" pronta.');
             }
         });
     }
