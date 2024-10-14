@@ -1,10 +1,7 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-    AppBar,
-    Toolbar,
     Typography,
-    Avatar,
-    IconButton, Box, Grid, Card, CardContent, CardActions, FormGroup, FormControlLabel, Switch, Modal,
+    Box, Grid, Card, CardContent, CardActions, Switch, Modal,
 } from '@mui/material';
 import ConstructionIcon from "@mui/icons-material/Construction";
 
@@ -16,6 +13,13 @@ export interface BaseProps {
 }
 
 const ModalTools: React.FC<BaseProps> = (props: BaseProps) => {
+    const [all, setAll] = useState(false)
+    const totalActive = () => {
+        return props.tools.filter((t) => t.enable === true).length
+    }
+    useEffect(() => {
+        setAll(totalActive() === props?.tools.length)
+    }, [props.tools]);
     return (
         <Modal
             open={props.openModal}
@@ -43,6 +47,16 @@ const ModalTools: React.FC<BaseProps> = (props: BaseProps) => {
                     Ferramentas Disponíveis
                 </Typography>
                 <Grid container spacing={1} sx={{mt: 1}}>
+                    <Grid item xs={12} sm={12} md={12}>
+                        <Switch onClick={(e: any) => {
+                            for (const t of props?.tools) {
+                                props.onChange(!all, t.uuid)
+                            }
+                            props.onClose(true)
+                        }}
+                                checked={all}
+                                color="secondary"/>
+                    </Grid>
                     {props?.tools.length > 0 ? (
                         props?.tools.map((tool) => (
                             <Grid item xs={12} sm={12} md={12} key={tool.uuid}>
