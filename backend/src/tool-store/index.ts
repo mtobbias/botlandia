@@ -27,7 +27,7 @@ export class ToolStore {
     readonly dateTimeTool = new DateTimeTool()
     readonly whatsAppTool = new WhatsAppTool()
     readonly rabbitMQTool = new RabbitMQTool(process.env.BOTLANDIA_RABBITMQ_URI || '')
-    readonly downloadTool = new DownloadTool(process.env.BOTLANDIA_BACKEND_DOWNLOAD || '/botlandia/download')
+    readonly downloadTool = new DownloadTool(process.env.BOTLANDIA_BACKEND_DOWNLOAD || '/app/botlandia/botlandia-backend/download')
     readonly readFileTool = new ReadFileTool()
     readonly puppeteerTool = new PuppeteerTool()
     readonly writeFileTool = new WriteFileTool()

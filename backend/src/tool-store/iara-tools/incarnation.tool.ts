@@ -17,7 +17,7 @@ export class IncarnationsTool extends Tool {
     constructor() {
         super(
             IncarnationsTool.UUID,
-            "acrd de Perfis de Agentes de Atendimento",
+            "Gerenciamento de Perfis de Agentes de Atendimento",
             `
             Ferramenta permite gerenciar perfis de agentes utilizados no atendimento via WhatsApp.
             Com esta ferramenta, você pode executar as seguintes ações:
