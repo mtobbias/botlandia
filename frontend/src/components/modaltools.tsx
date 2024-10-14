@@ -58,7 +58,15 @@ const ModalTools: React.FC<BaseProps> = (props: BaseProps) => {
                                 color="secondary"/>
                     </Grid>
                     {props?.tools.length > 0 ? (
-                        props?.tools.map((tool) => (
+                        props?.tools.sort((a: any, b: any) => {
+                            if (a.name.toLowerCase() < b.name.toLowerCase()) {
+                                return -1;
+                            }
+                            if (a.name.toLowerCase() > b.name.toLowerCase()) {
+                                return 1;
+                            }
+                            return 0;
+                        }).map((tool) => (
                             <Grid item xs={12} sm={12} md={12} key={tool.uuid}>
                                 <Card>
                                     <CardContent>
