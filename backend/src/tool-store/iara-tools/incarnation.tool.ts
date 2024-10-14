@@ -1,10 +1,10 @@
 import sqlite3 from "sqlite3";
 import path from "path";
-import {Tool} from "botlandia/core/tools";
-import {Logger} from "botlandia/utils/logger";
+import { Tool } from "botlandia/core/tools";
+import { Logger } from "botlandia/utils/logger";
 
 interface IncarnationsToolArgs {
-    action: "create" | "read" | "update" | "delete" | "deleteAll" | "list";
+    action: "create" | "read" | "update" | "delete" | "delete-all" | "list";
     role?: string;
     name?: string;
     description?: string;
@@ -17,37 +17,48 @@ export class IncarnationsTool extends Tool {
     constructor() {
         super(
             IncarnationsTool.UUID,
-            "AgentProfileTool",
+            "Gerenciamento de Perfis de Agentes de Atendimento",
             `
-            Executa operações de criação, leitura, atualização, exclusão e listagem nos perfis de agentes.
-            Permite gerenciar informações essenciais: 'role', 'name', 'description' e 'active',
-            e listar todos os perfis disponíveis.
+            Ferramenta permite gerenciar perfis de agentes utilizados no atendimento via WhatsApp.
+            Com esta ferramenta, você pode executar as seguintes ações:
+                - create: Criar um novo perfil.
+                - read: Ler informações de um perfil.
+                - update: Atualizar informações de um perfil.
+                - delete: Excluir um perfil.
+                - delete-all: Excluir todos os perfis de agentes.
+                - list: Listar todos os perfis.
+
+            Cada perfil de agente contém as seguintes informações:
+                - role (Função ou cargo atribuído ao agente, por exemplo, "Atendente", "Supervisor").
+                - name (Nome do agente, preferencialmente um nome feminino comum no Brasil).
+                - description (Descrição detalhada das responsabilidades e funções do agente).
+                - active (Indica se o perfil está ativo. Apenas um perfil pode estar ativo por vez).
             `
         );
         this.addField({
             name: "action",
             type: "string",
-            description: "Ação a ser realizada ('create', 'read', 'update', 'delete', 'deleteAll' ou 'list')",
+            description: "Ação a ser realizada. Valores permitidos: 'create', 'read', 'update', 'delete', 'delete-all', 'list'.",
         });
         this.addField({
             name: "role",
             type: "string",
-            description: "Função ou cargo do agente",
+            description: "Função ou cargo do agente, definindo suas responsabilidades dentro do atendimento.",
         });
         this.addField({
             name: "name",
             type: "string",
-            description: "Nome do agente",
+            description: "Nome do agente. Recomenda-se utilizar um nome feminino comum no Brasil para melhor identificação.",
         });
         this.addField({
             name: "description",
             type: "string",
-            description: "Descrição detalhada do agente",
+            description: "Descrição detalhada das funções e responsabilidades do agente.",
         });
         this.addField({
             name: "active",
             type: "boolean",
-            description: "Indica se o perfil está ativo",
+            description: "Indica se o perfil está ativo.",
         });
     }
 
@@ -55,11 +66,11 @@ export class IncarnationsTool extends Tool {
         const objArgs: IncarnationsToolArgs = JSON.parse(arg);
         Logger.toolSaid(this.name, `Executando com os argumentos: ${JSON.stringify(objArgs)}`);
 
-        const {action, role, name, description, active} = objArgs;
+        const { action, role, name, description, active } = objArgs;
 
         if (!action) {
-            Logger.error("[AgentProfileTool] Argumentos obrigatórios ausentes.");
-            throw new Error("Argumentos obrigatórios ausentes: 'action'.");
+            Logger.error("[IncarnationsTool] Argumento obrigatório ausente: 'action'.");
+            throw new Error("Argumento obrigatório ausente: 'action'.");
         }
 
         const dbFilePath = path.join(
@@ -70,10 +81,10 @@ export class IncarnationsTool extends Tool {
             switch (action) {
                 case "create":
                     if (!name || !role || !description) {
-                        Logger.error("[AgentProfileTool] Os campos 'name', 'role' e 'description' são necessários para criação.");
+                        Logger.error("[IncarnationsTool] Os campos 'name', 'role' e 'description' são necessários para criação.");
                         throw new Error("Para a ação 'create', os campos 'name', 'role' e 'description' são necessários.");
                     }
-                    await this.createProfile(dbFilePath, {role, name, description, active});
+                    await this.createProfile(dbFilePath, { role, name, description, active });
                     Logger.toolSaid(this.name, `Perfil criado com sucesso para: ${name}`);
                     return `Perfil criado com sucesso para: ${name}`;
                 case "read":
@@ -81,11 +92,11 @@ export class IncarnationsTool extends Tool {
                         // Se 'name' não for fornecido, ler o perfil ativo
                         const profile = await this.readActiveProfile(dbFilePath);
                         if (profile) {
-                            Logger.toolSaid(this.name, `Perfil ativo lido com sucesso`);
+                            Logger.toolSaid(this.name, `Perfil ativo lido com sucesso.`);
                             return profile;
                         } else {
-                            Logger.toolSaid(this.name, `Nenhum perfil ativo encontrado`);
-                            return `Nenhum perfil ativo encontrado`;
+                            Logger.toolSaid(this.name, `Nenhum perfil ativo encontrado.`);
+                            return `Nenhum perfil ativo encontrado.`;
                         }
                     } else {
                         const profile = await this.readProfile(dbFilePath, name);
@@ -99,34 +110,34 @@ export class IncarnationsTool extends Tool {
                     }
                 case "update":
                     if (!name) {
-                        Logger.error("[AgentProfileTool] O campo 'name' é necessário para atualização.");
+                        Logger.error("[IncarnationsTool] O campo 'name' é necessário para atualização.");
                         throw new Error("Para a ação 'update', o campo 'name' é necessário.");
                     }
-                    await this.updateProfile(dbFilePath, {role, name, description, active});
+                    await this.updateProfile(dbFilePath, { role, name, description, active });
                     Logger.toolSaid(this.name, `Perfil atualizado com sucesso para: ${name}`);
                     return `Perfil atualizado com sucesso para: ${name}`;
                 case "delete":
                     if (!name) {
-                        Logger.error("[AgentProfileTool] O campo 'name' é necessário para exclusão.");
+                        Logger.error("[IncarnationsTool] O campo 'name' é necessário para exclusão.");
                         throw new Error("Para a ação 'delete', o campo 'name' é necessário.");
                     }
                     await this.deleteProfile(dbFilePath, name);
                     Logger.toolSaid(this.name, `Perfil excluído com sucesso para: ${name}`);
                     return `Perfil excluído com sucesso para: ${name}`;
-                case "deleteAll":
+                case "delete-all":
                     await this.deleteAllProfiles(dbFilePath);
-                    Logger.toolSaid(this.name, `Todos os perfis foram excluídos com sucesso`);
-                    return `Todos os perfis foram excluídos com sucesso`;
+                    Logger.toolSaid(this.name, `Todos os perfis foram excluídos com sucesso.`);
+                    return `Todos os perfis foram excluídos com sucesso.`;
                 case "list":
                     const profiles = await this.listProfiles(dbFilePath);
-                    Logger.toolSaid(this.name, `Listagem de perfis realizada com sucesso`);
+                    Logger.toolSaid(this.name, `Listagem de perfis realizada com sucesso.`);
                     return JSON.stringify(profiles);
                 default:
-                    Logger.error(`[AgentProfileTool] Ação inválida: ${action}`);
+                    Logger.error(`[IncarnationsTool] Ação inválida: ${action}`);
                     throw new Error(`Ação inválida: ${action}`);
             }
         } catch (error: any) {
-            Logger.error(`[AgentProfileTool] Erro ao executar operação: ${error.message}`);
+            Logger.error(`[IncarnationsTool] Erro ao executar operação: ${error.message}`);
             throw new Error(`Erro ao executar operação: ${error.message}`);
         }
     }
@@ -140,7 +151,7 @@ export class IncarnationsTool extends Tool {
         return new Promise<void>((resolve, reject) => {
             const db = new sqlite3.Database(dbFilePath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
                 if (err) {
-                    Logger.error(`[AgentProfileTool] Erro ao abrir o banco de dados: ${err.message}`);
+                    Logger.error(`[IncarnationsTool] Erro ao abrir o banco de dados: ${err.message}`);
                     reject(err);
                     return;
                 }
@@ -157,7 +168,7 @@ export class IncarnationsTool extends Tool {
 
                 db.run(createTableSQL, (err) => {
                     if (err) {
-                        Logger.error(`[AgentProfileTool] Erro ao criar a tabela: ${err.message}`);
+                        Logger.error(`[IncarnationsTool] Erro ao criar a tabela: ${err.message}`);
                         reject(err);
                         db.close();
                         return;
@@ -166,7 +177,7 @@ export class IncarnationsTool extends Tool {
                     db.serialize(() => {
                         db.run('BEGIN TRANSACTION', (err) => {
                             if (err) {
-                                Logger.error(`[AgentProfileTool] Erro ao iniciar transação: ${err.message}`);
+                                Logger.error(`[IncarnationsTool] Erro ao iniciar transação: ${err.message}`);
                                 reject(err);
                                 db.close();
                                 return;
@@ -176,7 +187,7 @@ export class IncarnationsTool extends Tool {
                                 if (success) {
                                     db.run('COMMIT', (err) => {
                                         if (err) {
-                                            Logger.error(`[AgentProfileTool] Erro ao finalizar transação: ${err.message}`);
+                                            Logger.error(`[IncarnationsTool] Erro ao finalizar transação: ${err.message}`);
                                             reject(err);
                                         } else {
                                             resolve();
@@ -203,7 +214,7 @@ export class IncarnationsTool extends Tool {
                                     profile.active ? 1 : 0
                                 ], function (err) {
                                     if (err) {
-                                        Logger.error(`[AgentProfileTool] Erro ao criar perfil: ${err.message}`);
+                                        Logger.error(`[IncarnationsTool] Erro ao criar perfil: ${err.message}`);
                                         finalizeTransaction(false);
                                         reject(err);
                                     } else {
@@ -217,7 +228,7 @@ export class IncarnationsTool extends Tool {
                                 // Definir todos os perfis como inativos antes de definir o novo perfil como ativo
                                 db.run(`UPDATE agent_profiles SET active = 0`, (err) => {
                                     if (err) {
-                                        Logger.error(`[AgentProfileTool] Erro ao atualizar status ativo: ${err.message}`);
+                                        Logger.error(`[IncarnationsTool] Erro ao atualizar status ativo: ${err.message}`);
                                         finalizeTransaction(false);
                                         reject(err);
                                     } else {
@@ -248,7 +259,7 @@ export class IncarnationsTool extends Tool {
         } | null>((resolve, reject) => {
             const db = new sqlite3.Database(dbFilePath, sqlite3.OPEN_READONLY, (err) => {
                 if (err) {
-                    Logger.error(`[AgentProfileTool] Erro ao abrir o banco de dados: ${err.message}`);
+                    Logger.error(`[IncarnationsTool] Erro ao abrir o banco de dados: ${err.message}`);
                     reject(err);
                     return;
                 }
@@ -261,7 +272,7 @@ export class IncarnationsTool extends Tool {
 
                 db.get(selectSQL, [name], (err, row: any) => {
                     if (err) {
-                        Logger.error(`[AgentProfileTool] Erro ao ler perfil: ${err.message}`);
+                        Logger.error(`[IncarnationsTool] Erro ao ler perfil: ${err.message}`);
                         reject(err);
                     } else {
                         if (row) {
@@ -296,7 +307,7 @@ export class IncarnationsTool extends Tool {
         } | null>((resolve, reject) => {
             const db = new sqlite3.Database(dbFilePath, sqlite3.OPEN_READONLY, (err) => {
                 if (err) {
-                    Logger.error(`[AgentProfileTool] Erro ao abrir o banco de dados: ${err.message}`);
+                    Logger.error(`[IncarnationsTool] Erro ao abrir o banco de dados: ${err.message}`);
                     reject(err);
                     return;
                 }
@@ -309,7 +320,7 @@ export class IncarnationsTool extends Tool {
 
                 db.get(selectSQL, [], (err, row: any) => {
                     if (err) {
-                        Logger.error(`[AgentProfileTool] Erro ao ler perfil ativo: ${err.message}`);
+                        Logger.error(`[IncarnationsTool] Erro ao ler perfil ativo: ${err.message}`);
                         reject(err);
                     } else {
                         if (row) {
@@ -339,7 +350,7 @@ export class IncarnationsTool extends Tool {
         return new Promise<void>((resolve, reject) => {
             const db = new sqlite3.Database(dbFilePath, sqlite3.OPEN_READWRITE, (err) => {
                 if (err) {
-                    Logger.error(`[AgentProfileTool] Erro ao abrir o banco de dados: ${err.message}`);
+                    Logger.error(`[IncarnationsTool] Erro ao abrir o banco de dados: ${err.message}`);
                     reject(err);
                     return;
                 }
@@ -347,7 +358,7 @@ export class IncarnationsTool extends Tool {
                 db.serialize(() => {
                     db.run('BEGIN TRANSACTION', (err) => {
                         if (err) {
-                            Logger.error(`[AgentProfileTool] Erro ao iniciar transação: ${err.message}`);
+                            Logger.error(`[IncarnationsTool] Erro ao iniciar transação: ${err.message}`);
                             reject(err);
                             db.close();
                             return;
@@ -357,7 +368,7 @@ export class IncarnationsTool extends Tool {
                             if (success) {
                                 db.run('COMMIT', (err) => {
                                     if (err) {
-                                        Logger.error(`[AgentProfileTool] Erro ao finalizar transação: ${err.message}`);
+                                        Logger.error(`[IncarnationsTool] Erro ao finalizar transação: ${err.message}`);
                                         reject(err);
                                     } else {
                                         resolve();
@@ -388,7 +399,7 @@ export class IncarnationsTool extends Tool {
                         }
 
                         if (updateFields.length === 0) {
-                            Logger.error(`[AgentProfileTool] Nenhum campo para atualizar foi fornecido.`);
+                            Logger.error(`[IncarnationsTool] Nenhum campo para atualizar foi fornecido.`);
                             finalizeTransaction(false);
                             reject(new Error("Nenhum campo para atualizar foi fornecido."));
                             return;
@@ -404,11 +415,11 @@ export class IncarnationsTool extends Tool {
                             updateValues.push(profile.name);
                             db.run(updateSQL, updateValues, function (err) {
                                 if (err) {
-                                    Logger.error(`[AgentProfileTool] Erro ao atualizar perfil: ${err.message}`);
+                                    Logger.error(`[IncarnationsTool] Erro ao atualizar perfil: ${err.message}`);
                                     finalizeTransaction(false);
                                     reject(err);
                                 } else if (this.changes === 0) {
-                                    Logger.warn(`[AgentProfileTool] Nenhum perfil encontrado para: ${profile.name}`);
+                                    Logger.warn(`[IncarnationsTool] Nenhum perfil encontrado para: ${profile.name}`);
                                     finalizeTransaction(false);
                                     reject(new Error(`Perfil não encontrado para: ${profile.name}`));
                                 } else {
@@ -421,7 +432,7 @@ export class IncarnationsTool extends Tool {
                         if (profile.active) {
                             db.run(`UPDATE agent_profiles SET active = 0 WHERE name != ?`, [profile.name], (err) => {
                                 if (err) {
-                                    Logger.error(`[AgentProfileTool] Erro ao atualizar status ativo: ${err.message}`);
+                                    Logger.error(`[IncarnationsTool] Erro ao atualizar status ativo: ${err.message}`);
                                     finalizeTransaction(false);
                                     reject(err);
                                 } else {
@@ -451,7 +462,7 @@ export class IncarnationsTool extends Tool {
         }>>((resolve, reject) => {
             const db = new sqlite3.Database(dbFilePath, sqlite3.OPEN_READONLY, (err) => {
                 if (err) {
-                    Logger.error(`[AgentProfileTool] Erro ao abrir o banco de dados: ${err.message}`);
+                    Logger.error(`[IncarnationsTool] Erro ao abrir o banco de dados: ${err.message}`);
                     reject(err);
                     return;
                 }
@@ -463,7 +474,7 @@ export class IncarnationsTool extends Tool {
 
                 db.all(selectSQL, [], (err, rows: any[]) => {
                     if (err) {
-                        Logger.error(`[AgentProfileTool] Erro ao listar perfis: ${err.message}`);
+                        Logger.error(`[IncarnationsTool] Erro ao listar perfis: ${err.message}`);
                         reject(err);
                     } else {
                         const profiles = rows.map(row => ({
@@ -484,7 +495,7 @@ export class IncarnationsTool extends Tool {
         return new Promise<void>((resolve, reject) => {
             const db = new sqlite3.Database(dbFilePath, sqlite3.OPEN_READWRITE, (err) => {
                 if (err) {
-                    Logger.error(`[AgentProfileTool] Erro ao abrir o banco de dados: ${err.message}`);
+                    Logger.error(`[IncarnationsTool] Erro ao abrir o banco de dados: ${err.message}`);
                     reject(err);
                     return;
                 }
@@ -496,13 +507,13 @@ export class IncarnationsTool extends Tool {
 
                 db.run(deleteSQL, [name], function (err) {
                     if (err) {
-                        Logger.error(`[AgentProfileTool] Erro ao excluir perfil: ${err.message}`);
+                        Logger.error(`[IncarnationsTool] Erro ao excluir perfil: ${err.message}`);
                         reject(err);
                     } else if (this.changes === 0) {
-                        Logger.warn(`[AgentProfileTool] Nenhum perfil encontrado para: ${name}`);
+                        Logger.warn(`[IncarnationsTool] Nenhum perfil encontrado para: ${name}`);
                         resolve();
                     } else {
-                        Logger.debug(`[AgentProfileTool] Perfil excluído: ${name}`);
+                        Logger.debug(`[IncarnationsTool] Perfil excluído: ${name}`);
                         resolve();
                     }
                     db.close();
@@ -515,7 +526,7 @@ export class IncarnationsTool extends Tool {
         return new Promise<void>((resolve, reject) => {
             const db = new sqlite3.Database(dbFilePath, sqlite3.OPEN_READWRITE, (err) => {
                 if (err) {
-                    Logger.error(`[AgentProfileTool] Erro ao abrir o banco de dados: ${err.message}`);
+                    Logger.error(`[IncarnationsTool] Erro ao abrir o banco de dados: ${err.message}`);
                     reject(err);
                     return;
                 }
@@ -524,10 +535,10 @@ export class IncarnationsTool extends Tool {
 
                 db.run(deleteSQL, function (err) {
                     if (err) {
-                        Logger.error(`[AgentProfileTool] Erro ao excluir todos os perfis: ${err.message}`);
+                        Logger.error(`[IncarnationsTool] Erro ao excluir todos os perfis: ${err.message}`);
                         reject(err);
                     } else {
-                        Logger.debug(`[AgentProfileTool] Todos os perfis foram excluídos`);
+                        Logger.debug(`[IncarnationsTool] Todos os perfis foram excluídos.`);
                         resolve();
                     }
                     db.close();
