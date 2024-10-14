@@ -11,6 +11,7 @@ export class RabbitUtil {
     public static readonly WHATSAPP_IN = "WHATSAPP_IN"
     public static readonly WHATSAPP_OUT = "WHATSAPP_OUT"
     public static readonly WHATSAPP_READY = "WHATSAPP_READY"
+
     constructor() {
         this.url = process.env.BOTLANDIA_RABBITMQ_URI as string; // Lê a URL do RabbitMQ do ambiente
 
@@ -48,19 +49,18 @@ export class RabbitUtil {
     }
 
     async consume(queueName: string, callback: (msg: amqp.Message | null) => void): Promise<void> {
-        if (!this.connection) {
-            console.error(`Channel not connected`);
-            return;
+        try {
+            await this.getChannel()
+            await this.channel.assertQueue(queueName, {durable: true});
+            await this.channel.consume(queueName, (msg: any) => {
+                if (msg) {
+                    console.log(`Message received from ${queueName}: ${msg.content.toString()}`);
+                    callback(msg);
+                    this.channel.ack(msg);
+                }
+            });
+        } catch (error: any) {
         }
-        await this.getChannel()
-        await this.channel.assertQueue(queueName, {durable: true});
-        await this.channel.consume(queueName, (msg: any) => {
-            if (msg) {
-                console.log(`Message received from ${queueName}: ${msg.content.toString()}`);
-                callback(msg);
-                this.channel.ack(msg);
-            }
-        });
     }
 
     async close(): Promise<void> {
