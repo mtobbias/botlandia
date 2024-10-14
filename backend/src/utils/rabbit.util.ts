@@ -23,7 +23,6 @@ export class RabbitUtil {
             console.log('Connected to RabbitMQ');
         } catch (error) {
             console.error('Failed to connect to RabbitMQ:', error);
-            throw error;
         }
     }
 
@@ -49,6 +48,10 @@ export class RabbitUtil {
     }
 
     async consume(queueName: string, callback: (msg: amqp.Message | null) => void): Promise<void> {
+        if (!this.connection) {
+            console.error(`Channel not connected`);
+            return;
+        }
         await this.getChannel()
         await this.channel.assertQueue(queueName, {durable: true});
         await this.channel.consume(queueName, (msg: any) => {

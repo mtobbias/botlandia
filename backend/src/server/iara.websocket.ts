@@ -36,35 +36,9 @@ export class IaraWebSocket {
 
         this.attachListeners();
 
-        this.rabbitUtil.consume(
-            RabbitUtil.WHATSAPP_IN,
-            async (message) => {
-                try {
-                    const whatsappMessage: IWhatsappMessage = JSON.parse(
-                        message.content.toString()
-                    );
-                    await this.processWhatsappMessage(whatsappMessage);
-                } catch (error) {
-                    Logger.error(
-                        `Erro ao processar mensagem do RabbitMQ: ${error}`
-                    );
-                }
-            }
-        );
-
-        this.rabbitUtil.consume(
-            RabbitUtil.WHATSAPP_READY,
-            async () => {
-                try {
-                    Logger.info(`WHATSAPP_READY recebido`);
-                    await this.broadcastInformation("Whatsapp está pronto");
-                } catch (error) {
-                    Logger.error(
-                        `Erro ao processar WHATSAPP_READY: ${error}`
-                    );
-                }
-            }
-        );
+        try{
+             this.initializeRabbit();
+        }catch (error: any) {}
 
         const getBrain = () => {
             return BrainFactory.giveMeThis(process.env.BOTLANDIA_IARA_BRAIN)
@@ -460,5 +434,41 @@ export class IaraWebSocket {
                 `
             )
             .build();
+    }
+
+    private initializeRabbit() {
+        try {
+            this.rabbitUtil.consume(
+                RabbitUtil.WHATSAPP_IN,
+                async (message) => {
+                    try {
+                        const whatsappMessage: IWhatsappMessage = JSON.parse(
+                            message.content.toString()
+                        );
+                        await this.processWhatsappMessage(whatsappMessage);
+                    } catch (error) {
+                        Logger.error(
+                            `Erro ao processar mensagem do RabbitMQ: ${error}`
+                        );
+                    }
+                }
+            );
+
+            this.rabbitUtil.consume(
+                RabbitUtil.WHATSAPP_READY,
+                async () => {
+                    try {
+                        Logger.info(`WHATSAPP_READY recebido`);
+                        await this.broadcastInformation("Whatsapp está pronto");
+                    } catch (error) {
+                        Logger.error(
+                            `Erro ao processar WHATSAPP_READY: ${error}`
+                        );
+                    }
+                }
+            );
+        } catch (err: any) {
+            Logger.error(`error to connect rabbitMQ ${err?.message}`)
+        }
     }
 }
