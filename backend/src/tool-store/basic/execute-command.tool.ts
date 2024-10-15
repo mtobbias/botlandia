@@ -14,9 +14,9 @@ export class ExecuteCommandTool extends Tool {
     constructor(prohibitedCommands: string[] = []) {
         super(
             ExecuteCommandTool.UUID,
-            "ExecuteCommandTool",
+            "Ferramenta para executar comandos no sistema operacional",
             `
-                Executa um comando no shell do sistema operacional.
+                Executa um comando no shell do sistema operacional, como calculadora, bloco de notas, comandos shell
                 Forneça o comando como um argumento.
                 Retorna a saída padrão (stdout) do comando.
                 Esta ferramenta permite a execução de qualquer comando, exceto aqueles especificados na lista de comandos proibidos.
