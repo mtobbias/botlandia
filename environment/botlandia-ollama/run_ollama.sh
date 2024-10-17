@@ -8,4 +8,4 @@ echo "======              BOTLANDIA              ========"
 echo "==================================================="
 echo "======          AGUARDE O DOWNLOAD         ========"
 echo "==================================================="
-/bin/ollama run llama3.2
+/bin/ollama run llama3.2:latest
