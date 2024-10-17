@@ -110,7 +110,7 @@ export interface FieldTool {
 }
 
 export interface ChatMessage {
-    role: "system" | "user" | "assistant";
+    role: "system" | "user" | "assistant"| "tool";
     content: string;
 }
 

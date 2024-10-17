@@ -55,7 +55,9 @@ export class OllamaBrain extends Brain implements IBrain {
         });
         return list.length > 0 ? list : undefined;
     }
-
+    public addChatSystem(content: string) {
+        this.chatHistory.push({role: "tool", content: content});
+    }
     thinkAbout = async (about: string, tools: any[]): Promise<IBill> => {
         const tools2 = [
             {
